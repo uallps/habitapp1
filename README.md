@@ -1,7 +1,7 @@
 
 # HabitApp – Visión y Producto Mínimo Viable
 > Documento de equipo y visión inicial del producto.  
-> **Última actualización:** 2025-09-23
+> **Última actualización:** 15-10-2025
 
 ---
 
