@@ -22,8 +22,8 @@ Ordenados alfabéticamente por **primer apellido** (convención habitual en ES).
 | 1 | **Alejandro Avilés Fernández** | [github.com/aaf925](https://github.com/aaf925) |
 | 2 | **Lucas Barrientos Muñoz** | [github.com/lbm410](https://github.com/lbm410) |
 | 3 | **Diego Castañeda Cortés** | [github.com/dcc0230](https://github.com/dcc0230) |
-| 4 | **Jorge González Muñoz** | [github.com/ualjgm847](https://github.com/ualjgm847) |
-| 5 | **Antonio Rafael Nieto Mora** | [github.com/ualanm020](https://github.com/ualanm020) |
+| 4 | **Jorge González Muñoz** | [github.com/ualjgm847](https://github.com/jgm847) |
+| 5 | **Antonio Rafael Nieto Mora** | [github.com/ualanm020](https://github.com/anm020) |
 
 ---
 
