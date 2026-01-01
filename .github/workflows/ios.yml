@@ -8,7 +8,7 @@ on:
 
 env:
   SCHEME: "HabitApp"
-  DESTINATION: "platform=iOS Simulator,name=iPhone 16,OS=18.4"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 16,OS=26.0.1"
 
 jobs:
   # ============================================
