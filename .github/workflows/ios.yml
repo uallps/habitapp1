@@ -1,0 +1,175 @@
+name: iOS CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 16,OS=18.4"
+
+jobs:
+  # ============================================
+  # JOB 1: Build
+  # ============================================
+  build:
+    name: 🔨 Build
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 📱 List available simulators
+      run: xcrun simctl list devices available
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 2: Unit Tests
+  # ============================================
+  test:
+    name: 🧪 Unit Tests
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run Unit Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          -resultBundlePath TestResults.xcresult \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color --report junit && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: unit-test-results
+        path: |
+          TestResults.xcresult
+          build/reports/
+        retention-days: 30
+
+  # ============================================
+  # JOB 3: Build Release Archive
+  # ============================================
+  archive:
+    name: 📦 Build Release
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📦 Build Release Archive
+      run: |
+        xcodebuild archive \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "generic/platform=iOS Simulator" \
+          -configuration Release \
+          -archivePath build/HabitApp.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          SKIP_INSTALL=NO \
+          BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+    
+    - name: 📊 Generate build info
+      run: |
+        mkdir -p build/artifacts
+        echo "Build Information" > build/artifacts/BUILD_INFO.txt
+        echo "=================" >> build/artifacts/BUILD_INFO.txt
+        echo "Date: $(date)" >> build/artifacts/BUILD_INFO.txt
+        echo "Commit: ${{ github.sha }}" >> build/artifacts/BUILD_INFO.txt
+        echo "Branch: ${{ github.ref_name }}" >> build/artifacts/BUILD_INFO.txt
+        echo "Runner: ${{ runner.os }}" >> build/artifacts/BUILD_INFO.txt
+        xcodebuild -version >> build/artifacts/BUILD_INFO.txt
+    
+    - name: 📤 Upload Release Archive
+      uses: actions/upload-artifact@v4
+      with:
+        name: HabitApp-Release-${{ github.sha }}
+        path: |
+          build/HabitApp.xcarchive
+          build/artifacts/
+        retention-days: 90
+
+  # ============================================
+  # JOB 4: Code Quality
+  # ============================================
+  lint:
+    name: 🔍 Code Quality
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📊 Count lines of code
+      run: |
+        echo "📊 Project Statistics"
+        echo "====================="
+        echo ""
+        echo "Swift files:"
+        find . -name "*.swift" -not -path "./.build/*" | wc -l
+        echo ""
+        echo "Total lines of Swift code:"
+        find . -name "*.swift" -not -path "./.build/*" -exec cat {} \; | wc -l
+        echo ""
+        echo "Files by directory:"
+        find . -name "*.swift" -not -path "./.build/*" | xargs dirname | sort | uniq -c | sort -rn
+    
+    - name: 📋 Generate file list
+      run: |
+        mkdir -p reports
+        echo "# HabitApp Source Files" > reports/FILE_LIST.md
+        echo "" >> reports/FILE_LIST.md
+        echo "Generated: $(date)" >> reports/FILE_LIST.md
+        echo "" >> reports/FILE_LIST.md
+        echo "## Swift Files" >> reports/FILE_LIST.md
+        find . -name "*.swift" -not -path "./.build/*" | sort >> reports/FILE_LIST.md
+    
+    - name: 📤 Upload reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: code-quality-reports
+        path: reports/
+        retention-days: 30

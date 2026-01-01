@@ -1,5 +1,11 @@
 
 # HabitApp – Visión y Producto Mínimo Viable
+
+[![iOS CI/CD](https://github.com/uallps/habitapp1/actions/workflows/ios.yml/badge.svg)](https://github.com/uallps/habitapp1/actions/workflows/ios.yml)
+[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
+[![Platform](https://img.shields.io/badge/Platform-iOS%2026+-blue.svg)](https://www.apple.com/ios/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 > Documento de equipo y visión inicial del producto.  
 > **Última actualización:** 15-10-2025
 
