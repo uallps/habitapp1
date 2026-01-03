@@ -68,7 +68,7 @@ struct SettingsView: View {
                         .padding(.horizontal, 16)
                     }
                 }
-                .frame(height: 420)
+                .frame(height: 480)
             }
             #endif
             
