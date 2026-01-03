@@ -133,17 +133,25 @@
 ## 📱 Capturas
 
 <p align="center">
-  <i>📸 Capturas de pantalla próximamente...</i>
+  <img src="docs/screenshots/habitsview.png" width="180" alt="Vista de Hábitos"/>
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/dayoverview.png" width="180" alt="Resumen del Día"/>
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/gamecenter.png" width="180" alt="Centro de Gamificación"/>
 </p>
 
-<!--
 <p align="center">
-  <img src="screenshots/home.png" width="200"/>
-  <img src="screenshots/habits.png" width="200"/>
-  <img src="screenshots/gamification.png" width="200"/>
-  <img src="screenshots/stats.png" width="200"/>
+  <img src="docs/screenshots/aicameragenerated.png" width="180" alt="Cámara IA"/>
+  &nbsp;&nbsp;
+  <img src="docs/screenshots/photographerachievement.png" width="180" alt="Logro Desbloqueado"/>
 </p>
--->
+
+<p align="center">
+  <sub>
+    <strong>De izquierda a derecha:</strong> Vista de hábitos • Resumen del día • Centro de gamificación<br/>
+    Cámara con IA • Logro desbloqueado
+  </sub>
+</p>
 
 ---
 
