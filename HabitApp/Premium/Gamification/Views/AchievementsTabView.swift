@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 struct AchievementsTabView: View {
     @ObservedObject var store: GamificationStore
+    @ObservedObject private var lang = LanguageManager.shared
     @State private var selectedCategory: AchievementCategory?
     @State private var selectedAchievement: Achievement?
     
@@ -46,7 +47,7 @@ struct AchievementsTabView: View {
                         )
                     )
                 
-                Text("Desbloqueados")
+                Text(lang.localized("unlocked"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -59,7 +60,7 @@ struct AchievementsTabView: View {
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(.gray)
                 
-                Text("Por desbloquear")
+                Text(lang.localized("to_unlock"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -73,7 +74,7 @@ struct AchievementsTabView: View {
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .foregroundStyle(.blue)
                 
-                Text("Completado")
+                Text(lang.localized("completed_percent"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -87,7 +88,7 @@ struct AchievementsTabView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
                 // All categories button
-                categoryButton(nil, name: "Todos", icon: "square.grid.2x2.fill")
+                categoryButton(nil, name: lang.localized("all"), icon: "square.grid.2x2.fill")
                 
                 ForEach(AchievementCategory.allCases, id: \.self) { category in
                     categoryButton(category, name: category.displayName, icon: category.icon)
@@ -246,7 +247,7 @@ struct AchievementDetailSheet: View {
                     
                     // Progress section
                     VStack(spacing: 12) {
-                        Text("Progreso")
+                        Text(LanguageManager.shared.localized("progress"))
                             .font(.headline)
                         
                         if achievement.isUnlocked {
@@ -254,7 +255,7 @@ struct AchievementDetailSheet: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.green)
                                 
-                                Text("¡Completado!")
+                                Text(LanguageManager.shared.localized("completed"))
                                     .foregroundStyle(.green)
                                 
                                 if let date = achievement.unlockedDate {

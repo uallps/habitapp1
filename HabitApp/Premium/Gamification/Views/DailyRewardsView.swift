@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 struct DailyRewardsView: View {
     @ObservedObject var store: GamificationStore
+    @ObservedObject private var lang = LanguageManager.shared
     @State private var showClaimAnimation = false
     @State private var claimedRewardInfo: ClaimedRewardInfo?
     
@@ -75,7 +76,7 @@ struct DailyRewardsView: View {
                         )
                     )
                 
-                Text("Días consecutivos")
+                Text(lang.localized("consecutive_days"))
                     .font(.headline)
                     .foregroundStyle(.secondary)
             }
@@ -86,7 +87,7 @@ struct DailyRewardsView: View {
                     Image(systemName: "sparkles")
                         .foregroundStyle(.yellow)
                     
-                    Text("¡Bonus x\(min(store.profile.loginStreak / 7, 4) + 1) activo!")
+                    Text(lang.localized("bonus_active").replacingOccurrences(of: "%@", with: "\(min(store.profile.loginStreak / 7, 4) + 1)"))
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.yellow)
                 }
@@ -106,7 +107,7 @@ struct DailyRewardsView: View {
     // MARK: - Weekly Calendar
     private var weeklyCalendar: some View {
         VStack(spacing: 16) {
-            Text("Esta semana")
+            Text(lang.localized("this_week"))
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -144,7 +145,7 @@ struct DailyRewardsView: View {
                     .font(.title2)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(store.canClaimDailyReward ? "Reclamar recompensa" : "Recompensa reclamada")
+                    Text(store.canClaimDailyReward ? lang.localized("claim_reward") : lang.localized("reward_claimed"))
                         .font(.headline)
                     
                     if store.canClaimDailyReward {
@@ -152,7 +153,7 @@ struct DailyRewardsView: View {
                             .font(.caption)
                             .foregroundStyle(.yellow)
                     } else {
-                        Text("Vuelve mañana")
+                        Text(lang.localized("come_back_tomorrow"))
                             .font(.caption)
                             .opacity(0.8)
                     }
@@ -185,12 +186,12 @@ struct DailyRewardsView: View {
     private var upcomingRewards: some View {
         VStack(spacing: 16) {
             HStack {
-                Text("Próximas recompensas")
+                Text(lang.localized("upcoming_rewards"))
                     .font(.headline)
                 
                 Spacer()
                 
-                Text("Días consecutivos")
+                Text(lang.localized("consecutive_days"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -198,8 +199,8 @@ struct DailyRewardsView: View {
             VStack(spacing: 10) {
                 UpcomingRewardRow(days: 7, reward: "50 XP Bonus", icon: "star.fill", color: .yellow, achieved: store.profile.loginStreak >= 7)
                 UpcomingRewardRow(days: 14, reward: "100 XP + Badge", icon: "medal.fill", color: .orange, achieved: store.profile.loginStreak >= 14)
-                UpcomingRewardRow(days: 30, reward: "250 XP + Trofeo", icon: "trophy.fill", color: .purple, achieved: store.profile.loginStreak >= 30)
-                UpcomingRewardRow(days: 100, reward: "1000 XP + Legendario", icon: "crown.fill", color: .yellow, achieved: store.profile.loginStreak >= 100)
+                UpcomingRewardRow(days: 30, reward: "250 XP + \(lang.localized("trophies"))", icon: "trophy.fill", color: .purple, achieved: store.profile.loginStreak >= 30)
+                UpcomingRewardRow(days: 100, reward: "1000 XP + \(lang.localized("rarity_legendary"))", icon: "crown.fill", color: .yellow, achieved: store.profile.loginStreak >= 100)
             }
         }
         .padding()
@@ -212,7 +213,7 @@ struct DailyRewardsView: View {
     // MARK: - Recent History
     private var recentHistory: some View {
         VStack(spacing: 16) {
-            Text("Historial reciente")
+            Text(lang.localized("recent_history"))
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -222,7 +223,7 @@ struct DailyRewardsView: View {
                         .font(.system(size: 40))
                         .foregroundStyle(.secondary)
                     
-                    Text("Aún no has reclamado recompensas")
+                    Text(lang.localized("no_rewards_yet"))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

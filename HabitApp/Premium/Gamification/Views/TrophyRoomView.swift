@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 struct TrophyRoomView: View {
     @ObservedObject var store: GamificationStore
+    @ObservedObject private var lang = LanguageManager.shared
     @State private var selectedTier: TrophyTier?
     @State private var selectedTrophy: Trophy?
     
@@ -100,7 +101,7 @@ struct TrophyRoomView: View {
                             )
                         )
                     
-                    Text("Trofeos obtenidos")
+                    Text(lang.localized("trophies_obtained"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -110,7 +111,7 @@ struct TrophyRoomView: View {
                         .font(.system(size: 32, weight: .bold, design: .rounded))
                         .foregroundStyle(.gray)
                     
-                    Text("Por conseguir")
+                    Text(lang.localized("to_achieve"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -123,7 +124,7 @@ struct TrophyRoomView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
                 // All tiers button
-                tierButton(nil, name: "Todos")
+                tierButton(nil, name: lang.localized("all"))
                 
                 ForEach(TrophyTier.allCases, id: \.self) { tier in
                     tierButton(tier, name: tier.displayName)

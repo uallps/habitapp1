@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 struct GamificationHubView: View {
     @StateObject private var store = GamificationStore.shared
+    @ObservedObject private var lang = LanguageManager.shared
     @State private var selectedTab: GamificationTab = .profile
     @State private var showDailyReward = false
     @State private var claimedReward: DailyReward?
@@ -17,10 +18,10 @@ struct GamificationHubView: View {
     @Environment(\.dismiss) private var dismiss
     
     enum GamificationTab: String, CaseIterable {
-        case profile = "Perfil"
-        case achievements = "Logros"
-        case trophies = "Trofeos"
-        case rewards = "Recompensas"
+        case profile
+        case achievements
+        case trophies
+        case rewards
         
         var icon: String {
             switch self {
@@ -28,6 +29,15 @@ struct GamificationHubView: View {
             case .achievements: return "medal.fill"
             case .trophies: return "trophy.fill"
             case .rewards: return "gift.fill"
+            }
+        }
+        
+        func displayName(lang: LanguageManager) -> String {
+            switch self {
+            case .profile: return lang.localized("profile")
+            case .achievements: return lang.localized("achievements")
+            case .trophies: return lang.localized("trophies")
+            case .rewards: return lang.localized("rewards")
             }
         }
     }
@@ -69,7 +79,7 @@ struct GamificationHubView: View {
                     .tabViewStyle(.page(indexDisplayMode: .never))
                 }
             }
-            .navigationTitle("🎮 Centro de Juego")
+            .navigationTitle("🎮 \(lang.localized("game_center"))")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -163,7 +173,7 @@ struct GamificationHubView: View {
                         .foregroundStyle(.white)
                 }
                 
-                Text("Centro de Juego")
+                Text(lang.localized("game_center"))
                     .font(.headline)
                     .foregroundStyle(.primary)
             }
@@ -199,7 +209,7 @@ struct GamificationHubView: View {
                         .foregroundStyle(.white)
                 }
                 
-                Text("Nivel \(store.profile.level.name)")
+                Text("\(lang.localized("level")) \(store.profile.level.name)")
                     .font(.caption.weight(.medium))
                     .foregroundStyle(.secondary)
                 
@@ -235,7 +245,7 @@ struct GamificationHubView: View {
                     .font(.title3)
                     .frame(width: 24)
                 
-                Text(tab.rawValue)
+                Text(tab.displayName(lang: LanguageManager.shared))
                     .font(.subheadline.weight(.medium))
                 
                 Spacer()
@@ -283,7 +293,7 @@ struct GamificationHubView: View {
                         .foregroundStyle(.white)
                 }
                 
-                Text(selectedTab.rawValue)
+                Text(selectedTab.displayName(lang: LanguageManager.shared))
                     .font(.title2.weight(.bold))
             }
             
@@ -370,7 +380,7 @@ struct GamificationHubView: View {
                 Image(systemName: tab.icon)
                     .font(.system(size: 14, weight: .semibold))
                 
-                Text(tab.rawValue)
+                Text(tab.displayName(lang: LanguageManager.shared))
                     .font(.subheadline.weight(.semibold))
             }
             .foregroundStyle(selectedTab == tab ? .white : .primary)
@@ -451,6 +461,7 @@ struct GamificationAlertModifier: ViewModifier {
 @MainActor
 struct ProfileTabView: View {
     @ObservedObject var store: GamificationStore
+    @ObservedObject private var lang = LanguageManager.shared
     
     var body: some View {
         ScrollView {
@@ -493,14 +504,14 @@ struct ProfileTabView: View {
                 .shadow(color: .purple.opacity(0.5), radius: 10)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Nivel \(store.profile.level.id)")
+                    Text("\(lang.localized("level")) \(store.profile.level.id)")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     
                     Text(store.profile.level.name)
                         .font(.title.weight(.bold))
                     
-                    Text("\(store.profile.totalXP) XP Total")
+                    Text("\(store.profile.totalXP) \(lang.localized("total_xp"))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -511,7 +522,7 @@ struct ProfileTabView: View {
             // Progress to next level
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text("Progreso al siguiente nivel")
+                    Text(lang.localized("progress_next_level"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     
@@ -594,43 +605,43 @@ struct ProfileTabView: View {
             GridItem(.flexible())
         ], spacing: 12) {
             StatCard(
-                title: "Completados",
+                title: lang.localized("total_completions"),
                 value: "\(store.profile.totalCompletions)",
                 icon: "checkmark.circle.fill",
                 color: .green
             )
             
             StatCard(
-                title: "Racha Máxima",
-                value: "\(store.profile.maxStreak) días",
+                title: lang.localized("max_streak"),
+                value: "\(store.profile.maxStreak) \(lang.localized("days"))",
                 icon: "flame.fill",
                 color: .orange
             )
             
             StatCard(
-                title: "Logros",
+                title: lang.localized("achievements"),
                 value: "\(store.achievementStats.unlocked)/\(store.achievementStats.total)",
                 icon: "medal.fill",
                 color: .yellow
             )
             
             StatCard(
-                title: "Trofeos",
+                title: lang.localized("trophies"),
                 value: "\(store.trophyStats.unlocked)/\(store.trophyStats.total)",
                 icon: "trophy.fill",
                 color: .purple
             )
             
             StatCard(
-                title: "Login Diario",
-                value: "\(store.profile.dailyLoginStreak) días",
+                title: lang.localized("daily") + " Login",
+                value: "\(store.profile.dailyLoginStreak) \(lang.localized("days"))",
                 icon: "calendar.badge.checkmark",
                 color: .blue
             )
             
             StatCard(
-                title: "Racha Actual",
-                value: "\(store.profile.currentStreak) días",
+                title: lang.localized("current_streak"),
+                value: "\(store.profile.currentStreak) \(lang.localized("days"))",
                 icon: "bolt.fill",
                 color: .cyan
             )
@@ -640,11 +651,11 @@ struct ProfileTabView: View {
     // MARK: - Recent XP Section
     private var recentXPSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Historial XP Reciente")
+            Text(lang.localized("recent_history") + " XP")
                 .font(.headline)
             
             if store.recentXPEvents.isEmpty {
-                Text("Completa hábitos para ganar XP")
+                Text(lang.localized("no_rewards_yet"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)

@@ -13,7 +13,7 @@ import SwiftUI
 @MainActor
 struct UserLevel: Identifiable, Codable, Equatable {
     let id: Int
-    let name: String
+    let nameKey: String
     let minXP: Int
     let maxXP: Int
     let iconName: String
@@ -23,17 +23,21 @@ struct UserLevel: Identifiable, Codable, Equatable {
         maxXP - minXP
     }
     
+    var name: String {
+        LanguageManager.shared.localized(nameKey)
+    }
+    
     static let levels: [UserLevel] = [
-        UserLevel(id: 1, name: "Novato", minXP: 0, maxXP: 100, iconName: "star", color: "gray"),
-        UserLevel(id: 2, name: "Aprendiz", minXP: 100, maxXP: 300, iconName: "star.fill", color: "green"),
-        UserLevel(id: 3, name: "Dedicado", minXP: 300, maxXP: 600, iconName: "star.circle", color: "blue"),
-        UserLevel(id: 4, name: "Constante", minXP: 600, maxXP: 1000, iconName: "star.circle.fill", color: "purple"),
-        UserLevel(id: 5, name: "Experto", minXP: 1000, maxXP: 1500, iconName: "star.square", color: "orange"),
-        UserLevel(id: 6, name: "Maestro", minXP: 1500, maxXP: 2200, iconName: "star.square.fill", color: "red"),
-        UserLevel(id: 7, name: "Leyenda", minXP: 2200, maxXP: 3000, iconName: "crown", color: "yellow"),
-        UserLevel(id: 8, name: "Héroe", minXP: 3000, maxXP: 4000, iconName: "crown.fill", color: "pink"),
-        UserLevel(id: 9, name: "Campeón", minXP: 4000, maxXP: 5500, iconName: "trophy", color: "cyan"),
-        UserLevel(id: 10, name: "Inmortal", minXP: 5500, maxXP: Int.max, iconName: "trophy.fill", color: "gold")
+        UserLevel(id: 1, nameKey: "level_novice", minXP: 0, maxXP: 100, iconName: "star", color: "gray"),
+        UserLevel(id: 2, nameKey: "level_apprentice", minXP: 100, maxXP: 300, iconName: "star.fill", color: "green"),
+        UserLevel(id: 3, nameKey: "level_dedicated", minXP: 300, maxXP: 600, iconName: "star.circle", color: "blue"),
+        UserLevel(id: 4, nameKey: "level_consistent", minXP: 600, maxXP: 1000, iconName: "star.circle.fill", color: "purple"),
+        UserLevel(id: 5, nameKey: "level_expert", minXP: 1000, maxXP: 1500, iconName: "star.square", color: "orange"),
+        UserLevel(id: 6, nameKey: "level_master", minXP: 1500, maxXP: 2200, iconName: "star.square.fill", color: "red"),
+        UserLevel(id: 7, nameKey: "level_legend", minXP: 2200, maxXP: 3000, iconName: "crown", color: "yellow"),
+        UserLevel(id: 8, nameKey: "level_hero", minXP: 3000, maxXP: 4000, iconName: "crown.fill", color: "pink"),
+        UserLevel(id: 9, nameKey: "level_champion", minXP: 4000, maxXP: 5500, iconName: "trophy", color: "cyan"),
+        UserLevel(id: 10, nameKey: "level_immortal", minXP: 5500, maxXP: Int.max, iconName: "trophy.fill", color: "gold")
     ]
     
     static func level(for xp: Int) -> UserLevel {
@@ -53,12 +57,12 @@ enum AchievementCategory: String, Codable, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .streak: return "Rachas"
-        case .completion: return "Completados"
-        case .consistency: return "Consistencia"
-        case .explorer: return "Explorador"
-        case .social: return "Social"
-        case .special: return "Especiales"
+        case .streak: return LanguageManager.shared.localized("category_streaks")
+        case .completion: return LanguageManager.shared.localized("category_completions")
+        case .consistency: return LanguageManager.shared.localized("category_consistency")
+        case .explorer: return LanguageManager.shared.localized("category_explorer")
+        case .social: return LanguageManager.shared.localized("category_social")
+        case .special: return LanguageManager.shared.localized("category_special")
         }
     }
     
@@ -96,11 +100,11 @@ enum AchievementRarity: String, Codable, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .common: return "Común"
-        case .uncommon: return "Poco común"
-        case .rare: return "Raro"
-        case .epic: return "Épico"
-        case .legendary: return "Legendario"
+        case .common: return LanguageManager.shared.localized("rarity_common")
+        case .uncommon: return LanguageManager.shared.localized("rarity_uncommon")
+        case .rare: return LanguageManager.shared.localized("rarity_rare")
+        case .epic: return LanguageManager.shared.localized("rarity_epic")
+        case .legendary: return LanguageManager.shared.localized("rarity_legendary")
         }
     }
     
@@ -540,11 +544,11 @@ enum TrophyTier: String, Codable, CaseIterable {
     
     var displayName: String {
         switch self {
-        case .bronze: return "Bronce"
-        case .silver: return "Plata"
-        case .gold: return "Oro"
-        case .platinum: return "Platino"
-        case .diamond: return "Diamante"
+        case .bronze: return LanguageManager.shared.localized("tier_bronze")
+        case .silver: return LanguageManager.shared.localized("tier_silver")
+        case .gold: return LanguageManager.shared.localized("tier_gold")
+        case .platinum: return LanguageManager.shared.localized("tier_platinum")
+        case .diamond: return LanguageManager.shared.localized("tier_diamond")
         }
     }
     
