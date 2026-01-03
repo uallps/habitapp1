@@ -10,6 +10,7 @@ import Foundation
 @testable import HabitApp
 
 // MARK: - Language Manager Tests
+@MainActor
 struct LanguageManagerTests {
     
     @MainActor
@@ -78,6 +79,7 @@ struct LanguageManagerTests {
 }
 
 // MARK: - Localization Key Tests
+@MainActor
 struct LocalizationKeyTests {
     
     @Test func testCommonKeys() async throws {
@@ -125,6 +127,7 @@ struct LocalizationKeyTests {
 }
 
 // MARK: - Date Formatting Tests
+@MainActor
 struct DateFormattingTests {
     
     @Test func testDateFormatter() async throws {
@@ -173,6 +176,7 @@ struct DateFormattingTests {
 }
 
 // MARK: - Number Formatting Tests
+@MainActor
 struct NumberFormattingTests {
     
     @Test func testPercentageFormatting() async throws {
@@ -207,6 +211,7 @@ struct NumberFormattingTests {
 }
 
 // MARK: - Calendar Localization Tests
+@MainActor
 struct CalendarLocalizationTests {
     
     @Test func testWeekdaySymbols() async throws {
@@ -237,6 +242,7 @@ struct CalendarLocalizationTests {
 }
 
 // MARK: - Accessibility Label Tests
+@MainActor
 struct AccessibilityLabelTests {
     
     @Test func testAccessibilityLabelsNotEmpty() async throws {

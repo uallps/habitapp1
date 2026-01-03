@@ -10,6 +10,7 @@ import Foundation
 @testable import HabitApp
 
 // MARK: - Habit Model Tests
+@MainActor
 struct HabitModelTests {
     
     @Test func testHabitCreation() async throws {
@@ -159,6 +160,7 @@ struct HabitModelTests {
 }
 
 // MARK: - HabitCompletion Model Tests
+@MainActor
 struct HabitCompletionModelTests {
     
     @Test func testCompletionCreation() async throws {
@@ -204,6 +206,7 @@ struct HabitCompletionModelTests {
 }
 
 // MARK: - AppConfig Tests
+@MainActor
 struct AppConfigTests {
     
     @Test func testAppearanceModes() async throws {
@@ -223,6 +226,7 @@ struct AppConfigTests {
 }
 
 // MARK: - HabitIcons Tests
+@MainActor
 struct HabitIconsTests {
     
     @Test func testIconsExist() async throws {
@@ -240,6 +244,7 @@ struct HabitIconsTests {
 }
 
 // MARK: - Date/Calendar Helper Tests
+@MainActor
 struct DateHelperTests {
     
     @Test func testStartOfDay() async throws {
@@ -274,6 +279,7 @@ struct DateHelperTests {
 }
 
 // MARK: - UUID Tests
+@MainActor
 struct UUIDTests {
     
     @Test func testUUIDUniqueness() async throws {
@@ -298,6 +304,7 @@ struct UUIDTests {
 }
 
 // MARK: - Habit Frequency Tests
+@MainActor
 struct HabitFrequencyTests {
     
     @Test func testDailyFrequency() async throws {
@@ -343,6 +350,7 @@ struct HabitFrequencyTests {
 }
 
 // MARK: - Habit Notes Tests
+@MainActor
 struct HabitNotesTests {
     
     @Test func testDailyNotesStorage() async throws {
@@ -380,6 +388,7 @@ struct HabitNotesTests {
 }
 
 // MARK: - Codable Tests
+@MainActor
 struct CodableTests {
     
     @Test func testHabitEncodeDecode() async throws {
@@ -445,6 +454,7 @@ struct CodableTests {
 }
 
 // MARK: - Media Type Tests
+@MainActor
 struct MediaTypeTests {
     
     @Test func testMediaTypeValues() async throws {
@@ -467,6 +477,7 @@ struct MediaTypeTests {
 }
 
 // MARK: - Boundary Tests
+@MainActor
 struct BoundaryTests {
     
     @Test func testEmptyHabitName() async throws {
@@ -542,6 +553,7 @@ struct BoundaryTests {
 }
 
 // MARK: - RecapPeriod Tests
+@MainActor
 struct RecapPeriodTests {
     
     @Test func testRecapPeriodValues() async throws {
@@ -565,6 +577,7 @@ struct RecapPeriodTests {
 }
 
 // MARK: - HabitCategory Tests
+@MainActor
 struct HabitCategoryTests {
     
     @Test func testAllCategories() async throws {

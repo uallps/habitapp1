@@ -16,6 +16,7 @@ import AppKit
 @testable import HabitApp
 
 // MARK: - AppConfig Tests
+@MainActor
 struct AppConfigEnumTests {
     
     @Test func testAppVersionValues() async throws {
@@ -31,6 +32,7 @@ struct AppConfigEnumTests {
 }
 
 // MARK: - Appearance Mode Tests
+@MainActor
 struct AppearanceModeTests {
     
     @Test func testAppearanceModeRawValues() async throws {
@@ -79,6 +81,7 @@ struct PremiumFeatureTests {
 #endif
 
 // MARK: - Free Feature Tests
+@MainActor
 struct FreeFeatureTests {
     
     @MainActor
@@ -97,6 +100,7 @@ struct FreeFeatureTests {
 }
 
 // MARK: - Feature Flag Tests
+@MainActor
 struct FeatureFlagTests {
     
     @MainActor
@@ -116,6 +120,7 @@ struct FeatureFlagTests {
 }
 
 // MARK: - Secrets Configuration Tests
+@MainActor
 struct SecretsConfigTests {
     
     @Test func testSecretsFileExists() async throws {
@@ -139,6 +144,7 @@ struct SecretsConfigTests {
 }
 
 // MARK: - UserDefaults Keys Tests
+@MainActor
 struct UserDefaultsKeysTests {
     
     @Test func testAppearanceKey() async throws {
@@ -171,6 +177,7 @@ struct UserDefaultsKeysTests {
 }
 
 // MARK: - File Storage Tests
+@MainActor
 struct FileStorageTests {
     
     @Test func testDocumentsDirectory() async throws {
@@ -218,6 +225,7 @@ struct FileStorageTests {
 }
 
 // MARK: - Bundle Configuration Tests
+@MainActor
 struct BundleConfigTests {
     
     @Test func testBundleIdentifier() async throws {
@@ -246,6 +254,7 @@ struct BundleConfigTests {
 }
 
 // MARK: - Color Configuration Tests
+@MainActor
 struct ColorConfigTests {
     
     @Test func testPrimaryColor() async throws {

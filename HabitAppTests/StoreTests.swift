@@ -10,6 +10,7 @@ import Foundation
 @testable import HabitApp
 
 // MARK: - HabitStore Tests
+@MainActor
 struct HabitStoreTests {
     
     @MainActor
@@ -135,6 +136,7 @@ struct HabitStoreTests {
 }
 
 // MARK: - CompletionStore Tests
+@MainActor
 struct CompletionStoreTests {
     
     @MainActor
@@ -270,6 +272,7 @@ enum TestError: Error {
 }
 
 // MARK: - Date Range Tests
+@MainActor
 struct DateRangeTests {
     
     @Test func testWeeklyCompletions() async throws {
@@ -314,6 +317,7 @@ struct DateRangeTests {
 }
 
 // MARK: - Habit Filtering Tests
+@MainActor
 struct HabitFilteringTests {
     
     @Test func testFilterByFrequency() async throws {
@@ -379,6 +383,7 @@ struct HabitFilteringTests {
 }
 
 // MARK: - Notification Tests
+@MainActor
 struct NotificationTests {
     
     @Test func testHabitWithReminder() async throws {
@@ -408,6 +413,7 @@ struct NotificationTests {
 }
 
 // MARK: - Search Tests
+@MainActor
 struct SearchTests {
     
     @Test func testSearchByName() async throws {

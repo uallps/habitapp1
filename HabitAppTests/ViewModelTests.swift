@@ -10,6 +10,7 @@ import Foundation
 @testable import HabitApp
 
 // MARK: - Habit Validation Tests
+@MainActor
 struct HabitValidationTests {
     
     @Test func testValidHabitName() async throws {
@@ -51,6 +52,7 @@ struct HabitValidationTests {
 }
 
 // MARK: - Statistics Calculation Tests
+@MainActor
 struct StatisticsCalculationTests {
     
     @Test func testCompletionRateCalculation() async throws {
@@ -114,6 +116,7 @@ struct StatisticsCalculationTests {
 }
 
 // MARK: - Weekly Statistics Tests
+@MainActor
 struct WeeklyStatisticsTests {
     
     @Test func testDaysInWeek() async throws {
@@ -150,6 +153,7 @@ struct WeeklyStatisticsTests {
 }
 
 // MARK: - Monthly Statistics Tests
+@MainActor
 struct MonthlyStatisticsTests {
     
     @Test func testDaysInMonth() async throws {
@@ -173,6 +177,7 @@ struct MonthlyStatisticsTests {
 }
 
 // MARK: - Streak Calculation Tests
+@MainActor
 struct StreakCalculationTests {
     
     @Test func testStreakWithGaps() async throws {
@@ -241,6 +246,7 @@ struct StreakCalculationTests {
 }
 
 // MARK: - Date Range Tests
+@MainActor
 struct DateRangeCalculationTests {
     
     @Test func testLast7Days() async throws {
@@ -292,6 +298,7 @@ struct DateRangeCalculationTests {
 }
 
 // MARK: - Habit Sorting Tests
+@MainActor
 struct HabitSortingTests {
     
     @Test func testSortByName() async throws {
@@ -338,6 +345,7 @@ struct HabitSortingTests {
 }
 
 // MARK: - Error Handling Tests
+@MainActor
 struct ErrorHandlingTests {
     
     @Test func testInvalidDateHandling() async throws {

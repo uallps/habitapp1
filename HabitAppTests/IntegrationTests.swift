@@ -10,6 +10,7 @@ import Foundation
 @testable import HabitApp
 
 // MARK: - Complete Workflow Tests
+@MainActor
 struct WorkflowTests {
     
     @MainActor
@@ -135,6 +136,7 @@ struct WorkflowTests {
 }
 
 // MARK: - Data Persistence Tests
+@MainActor
 struct DataPersistenceTests {
     
     @MainActor
@@ -185,6 +187,7 @@ struct DataPersistenceTests {
 }
 
 // MARK: - Recap Workflow Tests
+@MainActor
 struct RecapWorkflowTests {
     
     @MainActor
@@ -283,6 +286,7 @@ struct RecapWorkflowTests {
 }
 
 // MARK: - Media Management Tests
+@MainActor
 struct MediaManagementTests {
     
     @Test func testImagePathGeneration() async throws {
@@ -332,6 +336,7 @@ struct MediaManagementTests {
 }
 
 // MARK: - Notification Workflow Tests
+@MainActor
 struct NotificationWorkflowTests {
     
     @Test func testReminderTimeExtraction() async throws {
@@ -370,6 +375,7 @@ struct NotificationWorkflowTests {
 }
 
 // MARK: - Edge Case Tests
+@MainActor
 struct EdgeCaseTests {
     
     @Test func testMidnightBoundary() async throws {
