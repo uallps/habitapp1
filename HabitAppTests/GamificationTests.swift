@@ -38,6 +38,7 @@ struct UserLevelTests {
     
     @MainActor
     @Test func testLevelForXP_Novato() async throws {
+        LanguageManager.shared.setLanguage("es")
         let level = UserLevel.level(for: 0)
         #expect(level.id == 1)
         #expect(level.name == "Novato")
@@ -45,6 +46,7 @@ struct UserLevelTests {
     
     @MainActor
     @Test func testLevelForXP_Aprendiz() async throws {
+        LanguageManager.shared.setLanguage("es")
         let level = UserLevel.level(for: 100)
         #expect(level.id == 2)
         #expect(level.name == "Aprendiz")
@@ -52,6 +54,7 @@ struct UserLevelTests {
     
     @MainActor
     @Test func testLevelForXP_HighXP() async throws {
+        LanguageManager.shared.setLanguage("es")
         let level = UserLevel.level(for: 6000)
         #expect(level.id == 10)
         #expect(level.name == "Inmortal")
@@ -69,6 +72,7 @@ struct UserLevelTests {
     
     @MainActor
     @Test func testLevelNames() async throws {
+        LanguageManager.shared.setLanguage("es")
         let expectedNames = ["Novato", "Aprendiz", "Dedicado", "Constante", "Experto", 
                             "Maestro", "Leyenda", "Héroe", "Campeón", "Inmortal"]
         
@@ -89,6 +93,7 @@ struct AchievementCategoryTests {
     
     @MainActor
     @Test func testCategoryDisplayNames() async throws {
+        LanguageManager.shared.setLanguage("es")
         #expect(AchievementCategory.streak.displayName == "Rachas")
         #expect(AchievementCategory.completion.displayName == "Completados")
         #expect(AchievementCategory.consistency.displayName == "Consistencia")
@@ -125,6 +130,7 @@ struct AchievementRarityTests {
     
     @MainActor
     @Test func testRarityDisplayNames() async throws {
+        LanguageManager.shared.setLanguage("es")
         #expect(AchievementRarity.common.displayName == "Común")
         #expect(AchievementRarity.legendary.displayName == "Legendario")
     }
@@ -223,6 +229,7 @@ struct TrophyTierTests {
     
     @MainActor
     @Test func testTierDisplayNames() async throws {
+        LanguageManager.shared.setLanguage("es")
         #expect(TrophyTier.bronze.displayName == "Bronce")
         #expect(TrophyTier.silver.displayName == "Plata")
         #expect(TrophyTier.gold.displayName == "Oro")
