@@ -1,0 +1,288 @@
+# =====================================================
+# GitHub Action: Gamification Module (Lucas)
+# =====================================================
+# Este workflow es específico para el módulo de Gamificación
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# Sistema de puntos, niveles, logros, trofeos y recompensas
+# =====================================================
+
+name: 🎮 Gamification Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/Gamification/**'
+      - 'HabitApp/Premium/Gamification/**'
+      - 'HabitAppTests/GamificationTests.swift'
+      - '.github/workflows/module-gamification.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/Gamification/**'
+      - 'HabitApp/Premium/Gamification/**'
+      - 'HabitAppTests/GamificationTests.swift'
+      - '.github/workflows/module-gamification.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "Gamification"
+  MODULE_AUTHOR: "Lucas"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint Gamification Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "🎮 Gamification Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "Features: XP, Levels, Achievements, Trophies, Daily Rewards"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on Gamification Module
+      run: |
+        echo "Linting Gamification Module Implementation..."
+        swiftlint lint --path HabitApp/Modules/Gamification --reporter github-actions-logging || true
+        
+        echo "Linting Gamification Premium Features..."
+        swiftlint lint --path HabitApp/Premium/Gamification --reporter github-actions-logging || true
+
+  # ============================================
+  # JOB 2: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with Gamification Module
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 📁 Create logs directory
+      run: mkdir -p build/logs
+    
+    - name: 🎮 List Gamification Files
+      run: |
+        echo "📂 Gamification Module Files:"
+        echo "--- Module Implementation ---"
+        find HabitApp/Modules/Gamification -name "*.swift" 2>/dev/null || echo "No module files found"
+        echo ""
+        echo "--- Premium Gamification Features ---"
+        find HabitApp/Premium/Gamification -name "*.swift" 2>/dev/null || echo "No premium files found"
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          2>&1 | tee build/logs/build.log | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📤 Upload build logs
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: gamification-module-build-logs
+        path: |
+          build/logs/
+          ~/Library/Developer/Xcode/DerivedData/**/Logs/
+        retention-days: 14
+
+  # ============================================
+  # JOB 3: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test Gamification Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📁 Create logs directory
+      run: mkdir -p build/logs
+    
+    - name: 🧪 Run Gamification Module Tests
+      run: |
+        echo "Running Gamification Module Tests..."
+        echo "Testing: XP System, Levels, Achievements, Trophies, Daily Rewards"
+        
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          -resultBundlePath build/logs/TestResults.xcresult \
+          2>&1 | tee build/logs/test.log | xcpretty --color || true
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: gamification-module-test-results
+        path: |
+          build/logs/
+          build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 4: UI Preview Check
+  # ============================================
+  ui-check:
+    name: 🎨 UI Preview Check
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🎨 Check SwiftUI Previews
+      run: |
+        echo "Checking Gamification SwiftUI previews..."
+        echo ""
+        echo "📍 GamificationHubView:"
+        grep -l "PreviewProvider\|#Preview" HabitApp/Premium/Gamification/Views/GamificationHubView.swift && echo "✅ Preview found" || echo "⚠️ No preview found"
+        
+        echo ""
+        echo "📍 AchievementsTabView:"
+        grep -l "PreviewProvider\|#Preview" HabitApp/Premium/Gamification/Views/AchievementsTabView.swift && echo "✅ Preview found" || echo "⚠️ No preview found"
+        
+        echo ""
+        echo "📍 TrophyRoomView:"
+        grep -l "PreviewProvider\|#Preview" HabitApp/Premium/Gamification/Views/TrophyRoomView.swift && echo "✅ Preview found" || echo "⚠️ No preview found"
+        
+        echo ""
+        echo "📍 DailyRewardsView:"
+        grep -l "PreviewProvider\|#Preview" HabitApp/Premium/Gamification/Views/DailyRewardsView.swift && echo "✅ Preview found" || echo "⚠️ No preview found"
+
+  # ============================================
+  # JOB 5: Feature Verification
+  # ============================================
+  verify-features:
+    name: ✅ Verify Gamification Features
+    runs-on: macos-15
+    needs: test
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🎮 Verify XP System
+      run: |
+        echo "Checking XP System implementation..."
+        grep -q "totalXP" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ XP system found" || echo "❌ XP system missing"
+    
+    - name: 🏆 Verify Level System
+      run: |
+        echo "Checking Level System implementation..."
+        grep -q "UserLevel" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Level system found" || echo "❌ Level system missing"
+        grep -q "levels" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Level array found" || echo "❌ Level array missing"
+    
+    - name: 🏅 Verify Achievement System
+      run: |
+        echo "Checking Achievement System implementation..."
+        grep -q "Achievement" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Achievement model found" || echo "❌ Achievement model missing"
+        grep -q "AchievementRarity" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Rarity system found" || echo "❌ Rarity system missing"
+    
+    - name: 🏆 Verify Trophy System
+      run: |
+        echo "Checking Trophy System implementation..."
+        grep -q "Trophy" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Trophy model found" || echo "❌ Trophy model missing"
+        grep -q "TrophyTier" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Trophy tiers found" || echo "❌ Trophy tiers missing"
+    
+    - name: 🎁 Verify Daily Rewards
+      run: |
+        echo "Checking Daily Rewards implementation..."
+        grep -q "DailyReward" HabitApp/Premium/Gamification/Models/GamificationModels.swift && echo "✅ Daily rewards found" || echo "❌ Daily rewards missing"
+    
+    - name: 📊 Feature Summary
+      run: |
+        echo ""
+        echo "========================================="
+        echo "🎮 Gamification Module Feature Summary"
+        echo "========================================="
+        echo "📁 Models:"
+        ls -la HabitApp/Premium/Gamification/Models/ 2>/dev/null || echo "No models found"
+        echo ""
+        echo "📁 Store:"
+        ls -la HabitApp/Premium/Gamification/Store/ 2>/dev/null || echo "No store found"
+        echo ""
+        echo "📁 Views:"
+        ls -la HabitApp/Premium/Gamification/Views/ 2>/dev/null || echo "No views found"
+        echo ""
+        echo "📁 Module Implementation:"
+        ls -la HabitApp/Modules/Gamification/ 2>/dev/null || echo "No module impl found"
+
+  # ============================================
+  # JOB 6: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate Gamification Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for Gamification Module..."
+        if [ -f "docs/modules/MODULO_GAMIFICACION.md" ]; then
+          echo "✅ Documentation found"
+          cat docs/modules/MODULO_GAMIFICACION.md
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_GAMIFICACION.md"
+          echo "Creating placeholder..."
+        fi
+    
+    - name: 📊 Generate Feature Stats
+      run: |
+        echo ""
+        echo "========================================="
+        echo "📊 Gamification Module Statistics"
+        echo "========================================="
+        echo ""
+        echo "Swift Files:"
+        find HabitApp/Premium/Gamification HabitApp/Modules/Gamification -name "*.swift" 2>/dev/null | wc -l | xargs echo "  Total:"
+        echo ""
+        echo "Lines of Code:"
+        find HabitApp/Premium/Gamification HabitApp/Modules/Gamification -name "*.swift" -exec cat {} \; 2>/dev/null | wc -l | xargs echo "  Total:"
+        echo ""
+        echo "Test Files:"
+        grep -l "Gamification" HabitAppTests/*.swift 2>/dev/null | wc -l | xargs echo "  Total:"

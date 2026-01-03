@@ -29,6 +29,7 @@ final class ModuleRegistry: ObservableObject {
     @Published private(set) var recapsModule: (any RecapsModuleProtocol)?
     @Published private(set) var languageModule: (any LanguageModuleProtocol)?
     @Published private(set) var appearanceModule: (any AppearanceModuleProtocol)?
+    @Published private(set) var gamificationModule: (any GamificationModuleProtocol)?
     
     // MARK: - Initialization
     private init() {
@@ -85,6 +86,13 @@ final class ModuleRegistry: ObservableObject {
     /// - Parameter module: Módulo de apariencia
     func registerAppearanceModule(_ module: any AppearanceModuleProtocol) {
         appearanceModule = module
+        register(module)
+    }
+    
+    /// Registra el módulo de gamificación
+    /// - Parameter module: Módulo de gamificación
+    func registerGamificationModule(_ module: any GamificationModuleProtocol) {
+        gamificationModule = module
         register(module)
     }
     
@@ -162,6 +170,9 @@ final class ModuleRegistry: ObservableObject {
     
     /// Verifica si el módulo de apariencia está disponible
     var hasAppearanceModule: Bool { appearanceModule != nil }
+    
+    /// Verifica si el módulo de gamificación está disponible
+    var hasGamificationModule: Bool { gamificationModule != nil }
 }
 
 // MARK: - Module Registration Helper
@@ -195,6 +206,10 @@ struct ModuleBootstrapper {
         // Registrar módulo de Apariencia (Avilés)
         let appearanceModule = AppearanceModuleImpl()
         registry.registerAppearanceModule(appearanceModule)
+        
+        // Registrar módulo de Gamificación (Lucas)
+        let gamificationModule = GamificationModuleImpl()
+        registry.registerGamificationModule(gamificationModule)
         
         print("[ModuleBootstrapper] All modules registered successfully")
     }

@@ -1,7 +1,7 @@
 #if os(iOS)
 import SwiftUI
 import RealityKit
-import AVFoundation
+@preconcurrency import AVFoundation
 import ARKit
 import Combine
 import UIKit
@@ -623,16 +623,18 @@ class AdvancedPhotoCaptureManager: NSObject, ObservableObject {
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer?.videoGravity = .resizeAspectFill
         
+        let sessionToStart = session
         DispatchQueue.global(qos: .userInitiated).async {
-            session.startRunning()
+            sessionToStart.startRunning()
         }
     }
     
     func stopSession() {
         isCapturing = false
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.captureSession?.stopRunning()
-            self?.captureSession = nil
+        let session = captureSession
+        captureSession = nil
+        DispatchQueue.global(qos: .userInitiated).async {
+            session?.stopRunning()
         }
     }
     
@@ -749,6 +751,9 @@ class AdvancedPhotoCaptureManager: NSObject, ObservableObject {
 
 extension AdvancedPhotoCaptureManager: AVCaptureVideoDataOutputSampleBufferDelegate {
     nonisolated func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // Extract image synchronously before entering Task
+        guard let image = imageFromSampleBuffer(sampleBuffer) else { return }
+        
         Task { @MainActor in
             guard isCapturing else { return }
             
@@ -761,11 +766,9 @@ extension AdvancedPhotoCaptureManager: AVCaptureVideoDataOutputSampleBufferDeleg
             
             lastCaptureTime = now
             
-            if let image = imageFromSampleBuffer(sampleBuffer) {
-                capturedImages.append(image)
-                capturedCount = capturedImages.count
-                lastCapturedImage = image
-            }
+            capturedImages.append(image)
+            capturedCount = capturedImages.count
+            lastCapturedImage = image
         }
     }
     

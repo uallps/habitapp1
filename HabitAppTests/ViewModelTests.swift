@@ -370,11 +370,18 @@ struct ErrorHandlingTests {
     }
     
     @Test func testDivisionByZeroProtection() async throws {
-        let totalDays = 0
-        let completedDays = 0
+        // Test with zero total days
+        let totalDaysZero = 0
+        let completedDaysZero = 0
         
-        let rate = totalDays > 0 ? Double(completedDays) / Double(totalDays) : 0.0
+        let rateZero = totalDaysZero > 0 ? Double(completedDaysZero) / Double(totalDaysZero) : 0.0
+        #expect(rateZero == 0.0)
         
-        #expect(rate == 0.0)
+        // Test with non-zero total days
+        let totalDaysNonZero = 10
+        let completedDaysNonZero = 5
+        
+        let rateNonZero = totalDaysNonZero > 0 ? Double(completedDaysNonZero) / Double(totalDaysNonZero) : 0.0
+        #expect(rateNonZero == 0.5)
     }
 }

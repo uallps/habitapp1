@@ -87,25 +87,27 @@ class AdManager: NSObject, ObservableObject {
         let request = Request()
        
         InterstitialAd.load(with: AdUnitIDs.interstitial, request: request) { [weak self] ad, error in
-            Task { @MainActor in
+            guard let self = self else { return }
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 if let error = error {
                     print("[v0] ERROR cargando anuncio: \(error.localizedDescription)")
                     print("[v0] Código de error: \((error as NSError).code)")
                     print("[v0] Dominio de error: \((error as NSError).domain)")
-                    self?.isAdLoaded = false
+                    self.isAdLoaded = false
                    
                     print("[v0] Reintentando carga en 5 segundos...")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
                         self?.loadInterstitialAd()
                     }
                     return
                 }
                
                 print("[v0] ÉXITO: Anuncio intersticial cargado correctamente")
-                self?.interstitialAd = ad
-                self?.interstitialAd?.fullScreenContentDelegate = self
-                self?.isAdLoaded = true
-                print("[v0] isAdLoaded ahora es: \(self?.isAdLoaded ?? false)")
+                self.interstitialAd = ad
+                self.interstitialAd?.fullScreenContentDelegate = self
+                self.isAdLoaded = true
+                print("[v0] isAdLoaded ahora es: \(self.isAdLoaded)")
                 print("[v0] ========================================")
             }
         }

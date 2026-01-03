@@ -193,6 +193,70 @@ enum AppearanceModeType: String, CaseIterable {
     case auto = "auto"
 }
 
+// MARK: - Gamification Module Protocol (Lucas)
+/// Protocolo para el módulo de gamificación y recompensas
+@MainActor
+protocol GamificationModuleProtocol: ModuleProtocol {
+    /// Indica si el usuario tiene acceso premium a gamificación
+    var isPremiumUser: Bool { get }
+    
+    /// Nivel actual del usuario
+    var currentLevel: Int { get }
+    
+    /// XP total del usuario
+    var totalXP: Int { get }
+    
+    /// Número de logros desbloqueados
+    var unlockedAchievements: Int { get }
+    
+    /// Número de trofeos obtenidos
+    var unlockedTrophies: Int { get }
+    
+    /// Racha actual de login diario
+    var loginStreak: Int { get }
+    
+    /// Registra un hábito completado y otorga XP
+    /// - Parameters:
+    ///   - streak: Días consecutivos completando el hábito
+    ///   - category: Categoría del hábito
+    func recordHabitCompletion(streak: Int, category: String)
+    
+    /// Registra una foto añadida
+    func recordPhotoAdded()
+    
+    /// Registra un modelo 3D creado
+    func recordModel3DCreated()
+    
+    /// Registra un hábito creado con IA
+    func recordAIHabitCreated()
+    
+    /// Intenta reclamar recompensa diaria
+    /// - Returns: XP ganado o nil si ya se reclamó
+    func claimDailyReward() -> Int?
+    
+    /// Vista principal del hub de gamificación
+    func gamificationHubView() -> AnyView
+    
+    /// Datos del perfil de gamificación
+    func getProfileData() -> GamificationProfileData
+}
+
+/// Estructura de datos del perfil de gamificación (desacoplada del modelo interno)
+struct GamificationProfileData {
+    let totalXP: Int
+    let currentLevel: Int
+    let levelName: String
+    let xpForNextLevel: Int
+    let currentLevelProgress: Double
+    let totalCompletions: Int
+    let maxStreak: Int
+    let unlockedAchievements: Int
+    let totalAchievements: Int
+    let unlockedTrophies: Int
+    let totalTrophies: Int
+    let loginStreak: Int
+}
+
 // MARK: - Module Factory Protocol
 /// Protocolo para factory que crea instancias de módulos
 @MainActor

@@ -471,6 +471,25 @@ struct HabitCompletionSheet: View {
             store.setNote(noteText, for: habit, on: Date())
         }
         
+        // Registrar en gamificación - llamar directamente al Store
+        let streak = store.calculateStreak(for: habit)
+        print("[HabitCompletionSheet] Recording completion - streak: \(streak), category: \(habit.iconName)")
+        GamificationStore.shared.habitCompleted(streak: streak, category: habit.iconName)
+        
+        // Registrar foto si se añadió
+        if selectedImage != nil || capturedFallbackImage != nil {
+            print("[HabitCompletionSheet] Recording photo added")
+            GamificationStore.shared.photoAdded()
+        }
+        
+        // Registrar modelo 3D si se añadió
+        #if os(iOS)
+        if model3DURL != nil {
+            print("[HabitCompletionSheet] Recording 3D model created")
+            GamificationStore.shared.model3DCreated()
+        }
+        #endif
+        
         isProcessing = false
         dismiss()
     }

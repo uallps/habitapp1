@@ -4,6 +4,7 @@ struct SettingsView: View {
     @ObservedObject private var languageManager = LanguageManager.shared
     @ObservedObject private var appConfig = AppConfig.shared
     @Environment(\.colorScheme) var colorScheme
+    @State private var showGamificationHub = false
 
     var body: some View {
         #if os(macOS)
@@ -70,11 +71,70 @@ struct SettingsView: View {
                 .frame(height: 420)
             }
             #endif
+            
+            // ---------- GAMIFICACIÓN (Premium) ----------
+            if PremiumFeatures.isEnabled {
+                Section(header: Text("🎮 Gamificación")) {
+                    Button {
+                        showGamificationHub = true
+                    } label: {
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [.purple, .indigo],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(width: 44, height: 44)
+                                
+                                Image(systemName: "trophy.fill")
+                                    .font(.title3)
+                                    .foregroundStyle(.white)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Centro de Juego")
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
+                                
+                                Text("XP, Logros, Trofeos y Recompensas")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            // XP Badge
+                            HStack(spacing: 4) {
+                                Image(systemName: "star.fill")
+                                    .foregroundStyle(.yellow)
+                                Text("\(GamificationStore.shared.profile.totalXP) XP")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.purple)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(.purple.opacity(0.15), in: Capsule())
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
 
             // ---------- VERSIÓN DE LA APP ----------
             appVersionSection
         }
         .navigationTitle(languageManager.localized("settings"))
+        .sheet(isPresented: $showGamificationHub) {
+            GamificationHubView()
+        }
     }
     #endif
     
@@ -138,6 +198,52 @@ struct SettingsView: View {
                     }
                     #endif
                     
+                    // Gamification Card (Premium)
+                    if PremiumFeatures.isEnabled {
+                        macOSSettingsCard(title: "🎮 Gamificación", icon: "trophy.fill", iconColor: .purple) {
+                            Button {
+                                showGamificationHub = true
+                            } label: {
+                                HStack(spacing: 16) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Centro de Juego")
+                                            .font(.headline)
+                                        Text("XP, Logros, Trofeos y Recompensas diarias")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "star.fill")
+                                            .foregroundStyle(.yellow)
+                                        Text("\(GamificationStore.shared.profile.totalXP) XP")
+                                            .font(.caption.weight(.semibold))
+                                    }
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(.purple.opacity(0.2), in: Capsule())
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [.purple.opacity(0.1), .indigo.opacity(0.1)],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                        )
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    
                     // App Info Card
                     macOSSettingsCard(title: languageManager.localized("app_version"), icon: "info.circle.fill", iconColor: .cyan) {
                         macOSAppInfoContent
@@ -148,6 +254,9 @@ struct SettingsView: View {
             }
         }
         .background(Color.appBackground(for: colorScheme))
+        .sheet(isPresented: $showGamificationHub) {
+            GamificationHubView()
+        }
     }
     
     private func macOSSettingsCard<Content: View>(title: String, icon: String, iconColor: Color, @ViewBuilder content: () -> Content) -> some View {

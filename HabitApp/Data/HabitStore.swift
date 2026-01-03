@@ -93,6 +93,11 @@ final class HabitStore: ObservableObject {
             CompletionStore.shared.removeCompletion(for: habit.id, on: today)
         } else {
             habits[index].completedDates.append(today)
+            
+            // Registrar en gamificación cuando se completa - llamar directamente al store
+            let streak = calculateStreak(for: habits[index])
+            print("[HabitStore] Habit completed - streak: \(streak), category: \(habit.iconName)")
+            GamificationStore.shared.habitCompleted(streak: streak, category: habit.iconName)
         }
         saveHabits()
     }
