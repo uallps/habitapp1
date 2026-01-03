@@ -2,12 +2,13 @@
 # HabitApp – Visión y Producto Mínimo Viable
 
 [![iOS CI/CD](https://github.com/uallps/habitapp1/actions/workflows/ios.yml/badge.svg)](https://github.com/uallps/habitapp1/actions/workflows/ios.yml)
+[![Gamification Module](https://github.com/uallps/habitapp1/actions/workflows/module-gamification.yml/badge.svg)](https://github.com/uallps/habitapp1/actions/workflows/module-gamification.yml)
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
 [![Platform](https://img.shields.io/badge/Platform-iOS%2026+-blue.svg)](https://www.apple.com/ios/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > Documento de equipo y visión inicial del producto.  
-> **Última actualización:** 15-10-2025
+> **Última actualización:** 03-01-2026
 
 ---
 
@@ -15,7 +16,10 @@
 - [Miembros del equipo](#miembros-del-equipo)
 - [Visión de HabitApp](#visión-de-habitapp)
 - [Funcionalidades del MVP](#funcionalidades-del-mvp)
+- [Módulos Implementados](#módulos-implementados)
+- [Sistema de Gamificación](#sistema-de-gamificación)
 - [Funcionalidades extra (posibles expansiones)](#funcionalidades-extra-posibles-expansiones)
+- [Documentación](#documentación)
 - [Créditos y referencias](#créditos-y-referencias)
 
 ---
@@ -51,6 +55,60 @@ La formación de buenos hábitos se ha convertido en una prioridad para muchas p
 
 ---
 
+## Módulos Implementados
+
+HabitApp utiliza una **arquitectura modular** basada en el Plugin Pattern. Cada módulo es independiente y se registra mediante inyección de dependencias.
+
+| Módulo | Autor | Descripción |
+|--------|-------|-------------|
+| 📢 **Anuncios** | Avilés | Gestión de anuncios AdMob |
+| 📸 **Media 3D** | Lucas | Captura de fotos y modelos 3D con LiDAR |
+| 🤖 **IA para Hábitos** | Diego | Sugerencias de hábitos con GPT-4 Vision |
+| 📊 **Recaps** | Jorge | Resúmenes visuales tipo "stories" |
+| 🌍 **Multilenguaje** | Nieto | Internacionalización (ES/EN) |
+| 🎨 **Apariencia** | Avilés | Modo claro/oscuro/auto |
+| 🎮 **Gamificación** | Lucas | XP, niveles, logros, trofeos, recompensas diarias |
+
+Ver [ARQUITECTURA_MODULAR.md](docs/ARQUITECTURA_MODULAR.md) para detalles técnicos.
+
+---
+
+## Sistema de Gamificación
+
+### 🏆 Características
+
+- **Sistema de XP y Niveles**: 10 niveles desde "Novato" hasta "Inmortal"
+- **26 Logros**: En 6 categorías (Rachas, Completados, Consistencia, Explorador, Social, Especiales)
+- **10 Trofeos**: En 5 tiers (Bronce, Plata, Oro, Platino, Diamante)
+- **Recompensas Diarias**: Ciclo de 7 días con multiplicadores por racha
+
+### 📊 Tabla de Niveles
+
+| Nivel | Nombre | XP Requerido |
+|-------|--------|--------------|
+| 1 | Novato | 0-100 |
+| 2 | Aprendiz | 100-300 |
+| 3 | Dedicado | 300-600 |
+| 4 | Constante | 600-1,000 |
+| 5 | Experto | 1,000-1,500 |
+| 6 | Maestro | 1,500-2,200 |
+| 7 | Leyenda | 2,200-3,000 |
+| 8 | Héroe | 3,000-4,000 |
+| 9 | Campeón | 4,000-5,500 |
+| 10 | Inmortal | 5,500+ |
+
+### 🎯 Cómo ganar XP
+
+- ✅ Completar un hábito: **+5 XP**
+- 🔥 Bonus por racha: **+2 XP × días** (máx 20)
+- 🏅 Desbloquear logros: **+10-200 XP**
+- 🏆 Obtener trofeos: **+50-1000 XP**
+- 🎁 Recompensas diarias: **+5-50 XP**
+
+Ver [MODULO_GAMIFICACION.md](docs/modules/MODULO_GAMIFICACION.md) para documentación completa.
+
+---
+
 ## Funcionalidades extra (posibles expansiones)
 - **Gamificación y recompensas:** Incorporar elementos de **gamificación** para hacer más divertida la experiencia. Por ejemplo, otorgar **puntos, insignias o recompensas virtuales** al cumplir ciertos hitos (x días seguidos, metas mensuales logradas, etc.). Esto puede incluir un sistema de “niveles” o **logros** que celebran el progreso del usuario, similar a cómo **Habitica** transforma los hábitos en un juego de rol con recompensas en forma de oro o ítems [(ClickUp – guía de apps)](https://clickup.com/es-ES/blog/30902/best-habit-tracker-app#:~:text=A%20diferencia%20de%20la%20mayor%C3%ADa,personal%20sea%20divertido%20y%20motivador). La gamificación busca aumentar la motivación y hacer del desarrollo personal una **“aventura”** atractiva [(ClickUp)](https://clickup.com/es-ES/blog/30902/best-habit-tracker-app#:~:text=A%20diferencia%20de%20la%20mayor%C3%ADa,personal%20sea%20divertido%20y%20motivador).
 - **Funciones sociales y comunidad:** Añadir la opción de **compartir progresos** o realizar hábitos en grupo. Por ejemplo, el usuario podría **conectar con amigos** dentro de la app para ver los logros de cada uno, o unirse a **retos comunitarios** (ej.: _“30 días sin fumar”_ con un grupo). Las características de **comunidad** han demostrado facilitar la formación de hábitos al hacer el proceso más social y entretenido [(Business Research Insights)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-app-market-117491#:~:text=El%20mercado%20de%20aplicaciones%20de,del%20cliente%20y%20la%20satisfacci%C3%B3n).
@@ -59,7 +117,21 @@ La formación de buenos hábitos se ha convertido en una prioridad para muchas p
 - **Multiplataforma y sincronización en la nube:** Extender HabitApp más allá de iOS. Una versión en **Android** y/o una **web app** permitirían llegar a más usuarios. Junto con esto, habilitar **sincronización en la nube** para que el usuario pueda acceder a sus hábitos desde múltiples dispositivos (por ejemplo, usando la cuenta para mantener sus datos en iPhone, iPad o teléfono Android). Varias apps líderes ya ofrecen sincronización multiplataforma para mayor comodidad [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20aplicaci%C3%B3n%20que%20busca%20combinar,sincronizaci%C3%B3n%20en%20todos%20tus%20dispositivos), por lo que incorporar esta capacidad ayudaría a HabitApp a competir a la par en términos de **accesibilidad**.
 - **Contenido guiado y rutinas recomendadas:** Añadir módulos de **rutinas predefinidas** o planes de hábitos podría enriquecer la app. Por ejemplo, ofrecer **programas de 21 días** con pasos graduales, inspirados en técnicas de coaching. Apps como _Fabulous_ incluyen “programas de entrenamiento” con objetivos inteligentes y coaching personal [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20magn%C3%ADfica%20aplicaci%C3%B3n%20que%20no,fines%2C%20y%20un%20entrenador%20personal). HabitApp podría incorporar secciones educativas con **consejos diarios**, **motivación adicional** (frases inspiradoras, técnicas de *Atomic Habits*, etc.) y la posibilidad de seguir un plan guiado.
 - **Seguimiento de “malos hábitos”:** Además de fomentar hábitos positivos, HabitApp podría incluir una sección para **monitorear hábitos que se quieren dejar** (p. ej., fumar, consumo de refrescos, redes sociales excesivas). Esta funcionalidad permitiría registrar el tiempo desde la última vez que se incurrió en el hábito a eliminar y contar **rachas de abstinencia**, mostrando métricas motivadoras como **tiempo o dinero ahorrado** [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20es%20una%20aplicaci%C3%B3n%20que,te%20ayude%20a%20dejarlos%20atr%C3%A1s).
+---
 
+## Documentación
+
+| Documento | Descripción |
+|-----------|-------------|
+| [ARQUITECTURA_MODULAR.md](docs/ARQUITECTURA_MODULAR.md) | Arquitectura y patrones de diseño |
+| [ICONOS_GAMIFICACION.md](docs/ICONOS_GAMIFICACION.md) | Prompts para generar iconos de logros y trofeos |
+| [MODULO_GAMIFICACION.md](docs/modules/MODULO_GAMIFICACION.md) | Documentación completa del módulo de gamificación |
+| [MODULO_ANUNCIOS.md](docs/modules/MODULO_ANUNCIOS.md) | Módulo de anuncios AdMob |
+| [MODULO_MEDIA3D.md](docs/modules/MODULO_MEDIA3D.md) | Módulo de captura 3D |
+| [MODULO_AIHABIT.md](docs/modules/MODULO_AIHABIT.md) | Módulo de IA para hábitos |
+| [MODULO_RECAPS.md](docs/modules/MODULO_RECAPS.md) | Módulo de resúmenes |
+| [MODULO_LANGUAGE.md](docs/modules/MODULO_LANGUAGE.md) | Módulo de multilenguaje |
+| [MODULO_APPEARANCE.md](docs/modules/MODULO_APPEARANCE.md) | Módulo de apariencia |
 ---
 
 ## Créditos y referencias

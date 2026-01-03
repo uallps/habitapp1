@@ -11,6 +11,7 @@
    - [Módulo de Recaps (Jorge)](#4-módulo-de-recaps-jorge)
    - [Módulo de Multilengüaje (Nieto)](#5-módulo-de-multilengüaje-nieto)
    - [Módulo de Apariencia (Avilés)](#6-módulo-de-apariencia-avilés)
+   - [Módulo de Gamificación (Lucas)](#7-módulo-de-gamificación-lucas)
 4. [Sistema de Inyección de Dependencias](#sistema-de-inyección-de-dependencias)
 5. [GitHub Actions por Módulo](#github-actions-por-módulo)
 
@@ -44,8 +45,22 @@ HabitApp/
 │   │   └── RecapsModuleImpl.swift   # Módulo Recaps
 │   ├── Language/
 │   │   └── LanguageModuleImpl.swift # Módulo Idioma
-│   └── Appearance/
-│       └── AppearanceModuleImpl.swift # Módulo Apariencia
+│   ├── Appearance/
+│   │   └── AppearanceModuleImpl.swift # Módulo Apariencia
+│   └── Gamification/
+│       └── GamificationModuleImpl.swift # Módulo Gamificación
+├── Premium/
+│   └── Gamification/
+│       ├── Models/
+│       │   └── GamificationModels.swift  # Modelos: XP, Niveles, Logros, Trofeos
+│       ├── Store/
+│       │   └── GamificationStore.swift   # Store: Lógica de gamificación
+│       └── Views/
+│           ├── GamificationHubView.swift    # Hub principal
+│           ├── AchievementsTabView.swift    # Vista de logros
+│           ├── TrophyRoomView.swift         # Sala de trofeos
+│           ├── DailyRewardsView.swift       # Recompensas diarias
+│           └── GamificationIconView.swift   # Iconos de logros/trofeos
 ```
 
 ---
@@ -476,6 +491,169 @@ enum AppearanceModeType: String, CaseIterable {
 
 ### ❓ ¿Cómo se inyecta sin aumentar el acoplamiento?
 
+1. **Enum genérico**: `AppearanceModeType` está definido en los protocolos, no en el módulo
+2. **ViewModifier desacoplado**: Modificador que aplica el tema
+3. **Colores centralizados**: Los colores se obtienen mediante funciones helper
+4. **Beneficios**:
+   - Los colores están centralizados en `Color+SystemBackground.swift`
+   - Se puede añadir modo "sepia" u otros sin modificar vistas
+   - La persistencia en UserDefaults es interna al módulo
+
+---
+
+## 7. Módulo de Gamificación (Lucas)
+
+### 📋 Información del Módulo
+
+| Propiedad | Valor |
+|-----------|-------|
+| **ID** | `com.habitapp.module.gamification` |
+| **Autor** | Lucas |
+| **Versión** | 1.0.0 |
+| **Archivo** | `HabitApp/Modules/Gamification/GamificationModuleImpl.swift` |
+| **GitHub Action** | `.github/workflows/module-gamification.yml` |
+
+### 🎯 Responsabilidad
+
+Sistema completo de gamificación que incluye:
+- **Sistema de XP y Niveles**: 10 niveles desde Novato hasta Inmortal
+- **Logros (Achievements)**: 26 logros en 6 categorías (Rachas, Completados, Consistencia, Explorador, Social, Especiales)
+- **Trofeos**: 10 trofeos en 5 tiers (Bronce, Plata, Oro, Platino, Diamante)
+- **Recompensas Diarias**: Sistema de login consecutivo con multiplicadores
+- **Historial de XP**: Registro de todos los eventos de puntos
+
+### 🔌 Protocolo
+
+```swift
+protocol GamificationModuleProtocol: ModuleProtocol {
+    // Estado del usuario
+    var totalXP: Int { get }
+    var currentLevel: Int { get }
+    var levelName: String { get }
+    var xpToNextLevel: Int { get }
+    var xpProgress: Double { get }
+    
+    // Estadísticas
+    var totalAchievementsUnlocked: Int { get }
+    var totalTrophiesUnlocked: Int { get }
+    var loginStreak: Int { get }
+    
+    // Datos de logros y trofeos
+    var achievements: [Achievement] { get }
+    var trophies: [Trophy] { get }
+    var unlockedAchievements: [Achievement] { get }
+    var unlockedTrophies: [Trophy] { get }
+    
+    // Recompensas diarias
+    var dailyRewards: [DailyReward] { get }
+    var canClaimDailyReward: Bool { get }
+    
+    // Acciones
+    func recordHabitCompletion(streak: Int, category: String)
+    func recordPhotoAdded()
+    func recordModel3DCreated()
+    func recordAIHabitCreated()
+    func claimDailyReward() -> Int
+    
+    // Vistas
+    @MainActor func gamificationHubView() -> AnyView
+    @MainActor func achievementsView() -> AnyView
+    @MainActor func trophyRoomView() -> AnyView
+    @MainActor func dailyRewardsView() -> AnyView
+    
+    // Datos para otras vistas
+    func getProfileData() -> GamificationProfileData
+}
+```
+
+### 📊 Sistema de XP y Niveles
+
+| Nivel | Nombre | XP Mínimo | XP Máximo |
+|-------|--------|-----------|-----------|
+| 1 | Novato | 0 | 100 |
+| 2 | Aprendiz | 100 | 300 |
+| 3 | Dedicado | 300 | 600 |
+| 4 | Constante | 600 | 1,000 |
+| 5 | Experto | 1,000 | 1,500 |
+| 6 | Maestro | 1,500 | 2,200 |
+| 7 | Leyenda | 2,200 | 3,000 |
+| 8 | Héroe | 3,000 | 4,000 |
+| 9 | Campeón | 4,000 | 5,500 |
+| 10 | Inmortal | 5,500 | ∞ |
+
+### 🏆 Categorías de Logros
+
+| Categoría | Icono | Ejemplos |
+|-----------|-------|----------|
+| Rachas | 🔥 | 3, 7, 14, 30, 100, 365 días |
+| Completados | ✅ | 1, 10, 50, 100, 500, 1000 hábitos |
+| Consistencia | 📅 | Semana perfecta, 80% mensual |
+| Explorador | 🧭 | Primera foto, primer 3D, IA |
+| Social | 👥 | Compartir, comunidad |
+| Especiales | ⭐ | Primer día, comeback, Año Nuevo |
+
+### 🏅 Tiers de Trofeos
+
+| Tier | Color | XP Bonus |
+|------|-------|----------|
+| Bronce | 🥉 | +50 XP |
+| Plata | 🥈 | +100 XP |
+| Oro | 🥇 | +200 XP |
+| Platino | 💎 | +400 XP |
+| Diamante | 💠 | +1000 XP |
+
+### ❓ ¿Cómo se integra con el núcleo?
+
+1. **Llamada directa al Store**: El `HabitStore` llama directamente a `GamificationStore.shared`:
+   ```swift
+   // En HabitStore.toggleHabitCompletion()
+   GamificationStore.shared.habitCompleted(streak: streak, category: habit.iconName)
+   ```
+
+2. **Singleton compartido**: `GamificationStore.shared` mantiene el estado global
+
+3. **Persistencia en UserDefaults**: Todos los datos se guardan automáticamente
+
+4. **Vistas desacopladas con AnyView**:
+   ```swift
+   func gamificationHubView() -> AnyView {
+       AnyView(GamificationHubView())
+   }
+   ```
+
+5. **Beneficios**:
+   - El sistema funciona para todos los usuarios (no solo Premium)
+   - Los logros se desbloquean automáticamente al cumplir requisitos
+   - Las recompensas diarias incluyen multiplicadores por racha
+   - Debug logging extenso para troubleshooting
+| **GitHub Action** | `.github/workflows/module-appearance.yml` |
+
+### 🎯 Responsabilidad
+
+Gestiona el modo de apariencia (claro, oscuro, automático) de la aplicación.
+
+### 🔌 Protocolo
+
+```swift
+protocol AppearanceModuleProtocol: ModuleProtocol {
+    var currentMode: AppearanceModeType { get set }
+    var colorScheme: ColorScheme? { get }
+    var availableModes: [AppearanceModeType] { get }
+    
+    func setMode(_ mode: AppearanceModeType)
+    
+    var appearancePublisher: AnyPublisher<AppearanceModeType, Never> { get }
+}
+
+enum AppearanceModeType: String, CaseIterable {
+    case light = "light"
+    case dark = "dark"
+    case auto = "auto"
+}
+```
+
+### ❓ ¿Cómo se inyecta sin aumentar el acoplamiento?
+
 1. **Enum genérico**: `AppearanceModeType` está definido en los protocolos, no en el módulo:
    ```swift
    // Cualquier módulo puede usar estos modos
@@ -573,6 +751,7 @@ if let module = ModuleRegistry.shared.getModule(byId: "com.habitapp.module.ads")
 | Recaps | `module-recaps.yml` | Cambios en `HabitApp/Modules/Recaps/**` |
 | Language | `module-language.yml` | Cambios en `HabitApp/Modules/Language/**` |
 | Appearance | `module-appearance.yml` | Cambios en `HabitApp/Modules/Appearance/**` |
+| Gamification | `module-gamification.yml` | Cambios en `HabitApp/Modules/Gamification/**` y `HabitApp/Premium/Gamification/**` |
 
 Cada workflow incluye:
 - ✅ **Lint**: Análisis estático con SwiftLint
@@ -623,6 +802,23 @@ Cada workflow incluye:
 │ RecapsModuleImpl │ │ LanguageImpl │ │AppearanceModuleIm│
 │    (Jorge)       │ │   (Nieto)    │ │    (Avilés)      │
 └──────────────────┘ └──────────────┘ └──────────────────┘
+
+┌──────────────────────────────────────────────────────────┐
+│                GamificationModuleProtocol                 │
+│                          ▲                                │
+└──────────────────────────┼────────────────────────────────┘
+                           │
+┌──────────────────────────┴────────────────────────────────┐
+│              GamificationModuleImpl (Lucas)               │
+│  ┌─────────────────┐  ┌─────────────┐  ┌────────────────┐ │
+│  │ GamificationStore│ │ Achievements│  │    Trophies    │ │
+│  │   (Singleton)    │ │  (26 total) │  │   (10 total)   │ │
+│  └─────────────────┘  └─────────────┘  └────────────────┘ │
+│  ┌─────────────────┐  ┌─────────────┐  ┌────────────────┐ │
+│  │ XP & Levels     │  │Daily Rewards│  │  XP History    │ │
+│  │  (10 levels)    │  │ (7-day cycle)│ │   (Events)     │ │
+│  └─────────────────┘  └─────────────┘  └────────────────┘ │
+└───────────────────────────────────────────────────────────┘
 ```
 
 ---

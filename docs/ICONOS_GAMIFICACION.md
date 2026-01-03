@@ -1,5 +1,8 @@
 # 🎨 Iconos de Gamificación - Prompts de Generación
 
+> **Última actualización:** 03-01-2026  
+> **Autor:** Lucas Barrientos
+
 Este documento contiene los prompts para generar todos los iconos de logros y trofeos de la app HabitApp.
 
 ## 📁 Ubicación de los archivos
@@ -21,6 +24,21 @@ HabitApp/Assets.xcassets/Gamification/
 - **Tamaño**: 512x512 píxeles (se escala automáticamente)
 - **Formato**: PNG con fondo transparente
 - **Variantes**: @1x, @2x, @3x (opcional, mínimo @2x)
+
+### Estado actual
+- ✅ Estructura de carpetas creada
+- ✅ Imagesets configurados con Contents.json
+- ⚠️ Usando SF Symbols como fallback hasta generar imágenes
+
+---
+
+## 🎯 Integración con el código
+
+Los iconos se muestran automáticamente en:
+- `AchievementsTabView` - Lista de logros
+- `TrophyRoomView` - Sala de trofeos
+- `GamificationHubView` - Hub principal
+- `GamificationIconView` - Componente de icono con fallback
 
 ---
 
