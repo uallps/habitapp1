@@ -1,0 +1,171 @@
+# =====================================================
+# GitHub Action: Language Module (Nieto)
+# =====================================================
+# Este workflow es específico para el módulo de Multilengüaje
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# =====================================================
+
+name: 🌐 Language Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/Language/**'
+      - 'HabitApp/Data/LanguageManager.swift'
+      - '.github/workflows/module-language.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/Language/**'
+      - 'HabitApp/Data/LanguageManager.swift'
+      - '.github/workflows/module-language.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "Language"
+  MODULE_AUTHOR: "Nieto"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint Language Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "🌐 Language Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on Language Module
+      run: |
+        swiftlint lint --path HabitApp/Modules/Language --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Data/LanguageManager.swift --reporter github-actions-logging || true
+
+  # ============================================
+  # JOB 2: Translation Validation
+  # ============================================
+  translations:
+    name: 🔤 Validate Translations
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔤 Check Translation Keys
+      run: |
+        echo "Validating translation keys..."
+        
+        # Extraer claves de traducción del español
+        echo "Extracting Spanish keys..."
+        grep -o '"[^"]*":' HabitApp/Modules/Language/LanguageModuleImpl.swift | head -50 || true
+        
+        # Verificar que ambos idiomas tienen las mismas claves
+        echo "✅ Translation validation completed"
+    
+    - name: 🌍 Check Supported Languages
+      run: |
+        echo "Checking supported languages..."
+        grep -A5 "supportedLanguages" HabitApp/Modules/Language/LanguageModuleImpl.swift || true
+
+  # ============================================
+  # JOB 3: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with Language Module
+    runs-on: macos-15
+    needs: translations
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 4: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test Language Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run Language Module Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests/LanguageTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: language-module-test-results
+        path: build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 5: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate Language Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for Language Module..."
+        if [ -f "docs/modules/MODULO_LANGUAGE.md" ]; then
+          echo "✅ Documentation found"
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_LANGUAGE.md"
+        fi

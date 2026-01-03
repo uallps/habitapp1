@@ -129,6 +129,11 @@ class OpenAIService: ObservableObject {
     @Published var isAnalyzing = false
     @Published var lastError: String?
     
+    /// Public property to check if API key is configured
+    var hasAPIKey: Bool {
+        !apiKey.isEmpty
+    }
+    
     private init() {}
     
     // MARK: - Validate API Key

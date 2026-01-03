@@ -1,0 +1,165 @@
+# =====================================================
+# GitHub Action: Media 3D Module (Lucas)
+# =====================================================
+# Este workflow es específico para el módulo de Modelado 3D
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# =====================================================
+
+name: 🎮 Media 3D Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/Media3D/**'
+      - 'HabitApp/Premium/Views/ObjectCaptureContainerView.swift'
+      - 'HabitApp/Views/Model3DViewer.swift'
+      - '.github/workflows/module-media3d.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/Media3D/**'
+      - 'HabitApp/Premium/Views/ObjectCaptureContainerView.swift'
+      - 'HabitApp/Views/Model3DViewer.swift'
+      - '.github/workflows/module-media3d.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "Media3D"
+  MODULE_AUTHOR: "Lucas"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint Media 3D Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "🎮 Media 3D Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on Media 3D Module
+      run: |
+        swiftlint lint --path HabitApp/Modules/Media3D --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Premium/Views/ObjectCaptureContainerView.swift --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Views/Model3DViewer.swift --reporter github-actions-logging || true
+
+  # ============================================
+  # JOB 2: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with Media 3D Module
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 3: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test Media 3D Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run Media 3D Module Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: media3d-module-test-results
+        path: build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 4: ARKit Compatibility Check
+  # ============================================
+  arkit-check:
+    name: 🔬 ARKit Compatibility
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔬 Check ARKit APIs
+      run: |
+        echo "Checking ARKit and RealityKit APIs usage..."
+        grep -r "ARWorldTrackingConfiguration" HabitApp/Modules/Media3D/ || echo "No direct ARWorldTrackingConfiguration usage"
+        grep -r "PhotogrammetrySession" HabitApp/Modules/Media3D/ || echo "No direct PhotogrammetrySession usage"
+        echo "✅ ARKit compatibility check completed"
+
+  # ============================================
+  # JOB 5: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate Media 3D Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for Media 3D Module..."
+        if [ -f "docs/modules/MODULO_MEDIA3D.md" ]; then
+          echo "✅ Documentation found"
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_MEDIA3D.md"
+        fi

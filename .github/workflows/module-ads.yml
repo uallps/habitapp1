@@ -1,0 +1,147 @@
+# =====================================================
+# GitHub Action: Ads Module (Avilés)
+# =====================================================
+# Este workflow es específico para el módulo de Anuncios
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# =====================================================
+
+name: 📺 Ads Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/Ads/**'
+      - 'HabitApp/Ads/**'
+      - '.github/workflows/module-ads.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/Ads/**'
+      - 'HabitApp/Ads/**'
+      - '.github/workflows/module-ads.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "Ads"
+  MODULE_AUTHOR: "Avilés"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint Ads Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "📺 Ads Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on Ads Module
+      run: |
+        if [ -d "HabitApp/Modules/Ads" ]; then
+          swiftlint lint --path HabitApp/Modules/Ads --reporter github-actions-logging || true
+        fi
+        if [ -d "HabitApp/Ads" ]; then
+          swiftlint lint --path HabitApp/Ads --reporter github-actions-logging || true
+        fi
+
+  # ============================================
+  # JOB 2: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with Ads Module
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 3: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test Ads Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run Ads Module Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ads-module-test-results
+        path: build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 4: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate Ads Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for Ads Module..."
+        if [ -f "docs/modules/MODULO_ANUNCIOS.md" ]; then
+          echo "✅ Documentation found"
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_ANUNCIOS.md"
+        fi

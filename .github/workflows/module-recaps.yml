@@ -1,0 +1,160 @@
+# =====================================================
+# GitHub Action: Recaps Module (Jorge)
+# =====================================================
+# Este workflow es específico para el módulo de Recaps
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# =====================================================
+
+name: 📊 Recaps Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/Recaps/**'
+      - 'HabitApp/Premium/Views/RecapView.swift'
+      - '.github/workflows/module-recaps.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/Recaps/**'
+      - 'HabitApp/Premium/Views/RecapView.swift'
+      - '.github/workflows/module-recaps.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "Recaps"
+  MODULE_AUTHOR: "Jorge"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint Recaps Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "📊 Recaps Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on Recaps Module
+      run: |
+        swiftlint lint --path HabitApp/Modules/Recaps --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Premium/Views/RecapView.swift --reporter github-actions-logging || true
+
+  # ============================================
+  # JOB 2: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with Recaps Module
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 3: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test Recaps Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run Recaps Module Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: recaps-module-test-results
+        path: build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 4: UI Preview Check
+  # ============================================
+  ui-check:
+    name: 🎨 UI Preview Check
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🎨 Check SwiftUI Previews
+      run: |
+        echo "Checking RecapView SwiftUI previews..."
+        grep -l "PreviewProvider\|#Preview" HabitApp/Premium/Views/RecapView.swift && echo "✅ Previews found" || echo "⚠️ No previews found"
+
+  # ============================================
+  # JOB 5: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate Recaps Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for Recaps Module..."
+        if [ -f "docs/modules/MODULO_RECAPS.md" ]; then
+          echo "✅ Documentation found"
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_RECAPS.md"
+        fi

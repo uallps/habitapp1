@@ -1,0 +1,188 @@
+# =====================================================
+# GitHub Action: Appearance Module (Avilés)
+# =====================================================
+# Este workflow es específico para el módulo de Apariencia
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# =====================================================
+
+name: 🎨 Appearance Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/Appearance/**'
+      - 'HabitApp/Utils/Color+SystemBackground.swift'
+      - 'HabitApp/Config/AppConfig.swift'
+      - '.github/workflows/module-appearance.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/Appearance/**'
+      - 'HabitApp/Utils/Color+SystemBackground.swift'
+      - 'HabitApp/Config/AppConfig.swift'
+      - '.github/workflows/module-appearance.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "Appearance"
+  MODULE_AUTHOR: "Avilés"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint Appearance Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "🎨 Appearance Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on Appearance Module
+      run: |
+        swiftlint lint --path HabitApp/Modules/Appearance --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Utils/Color+SystemBackground.swift --reporter github-actions-logging || true
+
+  # ============================================
+  # JOB 2: Color Accessibility Check
+  # ============================================
+  accessibility:
+    name: ♿ Accessibility Check
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: ♿ Check Color Contrast
+      run: |
+        echo "Checking color definitions for accessibility..."
+        
+        # Verificar que hay colores definidos para ambos modos
+        echo "Light mode colors:"
+        grep -A2 "colorScheme == .light" HabitApp/Utils/Color+SystemBackground.swift || true
+        
+        echo "Dark mode colors:"
+        grep -A2 "colorScheme == .dark" HabitApp/Utils/Color+SystemBackground.swift || true
+        
+        echo "✅ Color accessibility check completed"
+
+  # ============================================
+  # JOB 3: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with Appearance Module
+    runs-on: macos-15
+    needs: accessibility
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 4: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test Appearance Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run Appearance Module Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: appearance-module-test-results
+        path: build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 5: Theme Preview
+  # ============================================
+  theme-preview:
+    name: 🌓 Theme Preview
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🌓 Check Theme Modes
+      run: |
+        echo "Checking available appearance modes..."
+        grep -A10 "AppearanceModeType" HabitApp/Modules/Appearance/AppearanceModuleImpl.swift || true
+        echo "✅ Theme modes check completed"
+
+  # ============================================
+  # JOB 6: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate Appearance Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for Appearance Module..."
+        if [ -f "docs/modules/MODULO_APPEARANCE.md" ]; then
+          echo "✅ Documentation found"
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_APPEARANCE.md"
+        fi

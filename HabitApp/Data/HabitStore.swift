@@ -122,6 +122,48 @@ final class HabitStore: ObservableObject {
         saveHabits()
     }
     
+    // MARK: - Streak Calculation
+    func calculateStreak(for habit: Habit) -> Int {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        // Sort completed dates in descending order
+        let sortedDates = habit.completedDates
+            .map { calendar.startOfDay(for: $0) }
+            .sorted(by: >)
+        
+        guard !sortedDates.isEmpty else { return 0 }
+        
+        var streak = 0
+        var currentDate = today
+        
+        // Check if completed today or yesterday to start counting
+        if let firstDate = sortedDates.first {
+            let daysDiff = calendar.dateComponents([.day], from: firstDate, to: today).day ?? 0
+            if daysDiff > 1 {
+                // Streak broken - more than 1 day since last completion
+                return 0
+            }
+            if daysDiff == 1 {
+                // Last completion was yesterday, start from yesterday
+                currentDate = firstDate
+            }
+        }
+        
+        // Count consecutive days
+        for date in sortedDates {
+            if calendar.isDate(date, inSameDayAs: currentDate) {
+                streak += 1
+                currentDate = calendar.date(byAdding: .day, value: -1, to: currentDate)!
+            } else if date < currentDate {
+                // Gap found, streak ends
+                break
+            }
+        }
+        
+        return streak
+    }
+    
     // MARK: - JSON Persistence
     private func saveHabits() {
         do {

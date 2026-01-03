@@ -1,0 +1,181 @@
+# =====================================================
+# GitHub Action: AI Habit Module (Diego)
+# =====================================================
+# Este workflow es específico para el módulo de IA
+# Se ejecuta cuando hay cambios en los archivos del módulo
+# =====================================================
+
+name: 🤖 AI Habit Module CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'HabitApp/Modules/AIHabit/**'
+      - 'HabitApp/Premium/Views/CameraHabitView.swift'
+      - 'HabitApp/Premium/Views/HabitSuggestionSheet.swift'
+      - 'HabitApp/Premium/Services/OpenAIService.swift'
+      - '.github/workflows/module-aihabit.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'HabitApp/Modules/AIHabit/**'
+      - 'HabitApp/Premium/Views/CameraHabitView.swift'
+      - 'HabitApp/Premium/Views/HabitSuggestionSheet.swift'
+      - 'HabitApp/Premium/Services/OpenAIService.swift'
+      - '.github/workflows/module-aihabit.yml'
+
+env:
+  SCHEME: "HabitApp"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  MODULE_NAME: "AIHabit"
+  MODULE_AUTHOR: "Diego"
+
+jobs:
+  # ============================================
+  # JOB 1: Lint & Static Analysis
+  # ============================================
+  lint:
+    name: 🔍 Lint AI Habit Module
+    runs-on: macos-15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📋 Module Info
+      run: |
+        echo "========================================="
+        echo "🤖 AI Habit Module CI/CD"
+        echo "Author: ${{ env.MODULE_AUTHOR }}"
+        echo "========================================="
+    
+    - name: 🔧 Install SwiftLint
+      run: brew install swiftlint || true
+    
+    - name: 🔍 Run SwiftLint on AI Habit Module
+      run: |
+        swiftlint lint --path HabitApp/Modules/AIHabit --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Premium/Views/CameraHabitView.swift --reporter github-actions-logging || true
+        swiftlint lint --path HabitApp/Premium/Services/OpenAIService.swift --reporter github-actions-logging || true
+
+  # ============================================
+  # JOB 2: Security Check
+  # ============================================
+  security:
+    name: 🔐 Security Check
+    runs-on: macos-15
+    needs: lint
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔐 Check for API Key Leaks
+      run: |
+        echo "Checking for API key leaks in AI Habit Module..."
+        # Verificar que no haya API keys hardcodeadas
+        if grep -r "sk-" HabitApp/Modules/AIHabit/ HabitApp/Premium/Services/OpenAIService.swift 2>/dev/null | grep -v "Secrets.plist"; then
+          echo "⚠️ Possible API key leak detected!"
+          exit 1
+        else
+          echo "✅ No API key leaks detected"
+        fi
+    
+    - name: 🔐 Verify Secrets Configuration
+      run: |
+        echo "Checking Secrets.plist configuration..."
+        if [ -f "HabitApp/Config/Secrets.plist" ]; then
+          echo "⚠️ WARNING: Secrets.plist exists - ensure it's in .gitignore"
+        fi
+        if [ -f "HabitApp/Config/Secrets.plist.example" ]; then
+          echo "✅ Secrets.plist.example found"
+        fi
+
+  # ============================================
+  # JOB 3: Build Module
+  # ============================================
+  build:
+    name: 🔨 Build with AI Habit Module
+    runs-on: macos-15
+    needs: security
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 📋 Show Xcode version
+      run: xcodebuild -version
+    
+    - name: 🔨 Build for testing
+      run: |
+        xcodebuild build-for-testing \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+
+  # ============================================
+  # JOB 4: Module Tests
+  # ============================================
+  test:
+    name: 🧪 Test AI Habit Module
+    runs-on: macos-15
+    needs: build
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    
+    - name: 🧪 Run AI Habit Module Tests
+      run: |
+        xcodebuild test \
+          -project HabitApp.xcodeproj \
+          -scheme "$SCHEME" \
+          -destination "$DESTINATION" \
+          -configuration Debug \
+          -only-testing:HabitAppTests \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: aihabit-module-test-results
+        path: build/reports/
+        retention-days: 14
+
+  # ============================================
+  # JOB 5: Module Documentation
+  # ============================================
+  docs:
+    name: 📚 Generate AI Habit Docs
+    runs-on: macos-15
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: 📚 Check Module Documentation
+      run: |
+        echo "Checking documentation for AI Habit Module..."
+        if [ -f "docs/modules/MODULO_AIHABIT.md" ]; then
+          echo "✅ Documentation found"
+        else
+          echo "⚠️ Documentation not found at docs/modules/MODULO_AIHABIT.md"
+        fi
