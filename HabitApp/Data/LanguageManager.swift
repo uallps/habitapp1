@@ -328,6 +328,11 @@ class LanguageManager: ObservableObject {
             "recent_history": "Historial reciente",
             "no_rewards_yet": "Aún no has reclamado recompensas",
             
+            // Gamification - Settings
+            "gamification": "Gamificación",
+            "gamification_subtitle": "XP, Logros, Trofeos y Recompensas",
+            "daily_rewards": "Recompensas diarias",
+            
             // Gamification - Achievements (Names)
             "achievement_streak_3": "Primer Paso",
             "achievement_streak_7": "Semana Perfecta",
@@ -677,6 +682,11 @@ class LanguageManager: ObservableObject {
             "upcoming_rewards": "Upcoming rewards",
             "recent_history": "Recent history",
             "no_rewards_yet": "You haven't claimed any rewards yet",
+            
+            // Gamification - Settings
+            "gamification": "Gamification",
+            "gamification_subtitle": "XP, Achievements, Trophies & Rewards",
+            "daily_rewards": "Daily rewards",
             
             // Gamification - Achievements (Names)
             "achievement_streak_3": "First Step",

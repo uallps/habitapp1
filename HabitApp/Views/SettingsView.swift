@@ -74,7 +74,7 @@ struct SettingsView: View {
             
             // ---------- GAMIFICACIÓN (Premium) ----------
             if PremiumFeatures.isEnabled {
-                Section(header: Text("🎮 Gamificación")) {
+                Section(header: Text("🎮 \(languageManager.localized("gamification"))")) {
                     Button {
                         showGamificationHub = true
                     } label: {
@@ -96,11 +96,11 @@ struct SettingsView: View {
                             }
                             
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Centro de Juego")
+                                Text(languageManager.localized("game_center"))
                                     .font(.headline)
                                     .foregroundStyle(.primary)
                                 
-                                Text("XP, Logros, Trofeos y Recompensas")
+                                Text(languageManager.localized("gamification_subtitle"))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -200,15 +200,15 @@ struct SettingsView: View {
                     
                     // Gamification Card (Premium)
                     if PremiumFeatures.isEnabled {
-                        macOSSettingsCard(title: "🎮 Gamificación", icon: "trophy.fill", iconColor: .purple) {
+                        macOSSettingsCard(title: "🎮 \(languageManager.localized("gamification"))", icon: "trophy.fill", iconColor: .purple) {
                             Button {
                                 showGamificationHub = true
                             } label: {
                                 HStack(spacing: 16) {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("Centro de Juego")
+                                        Text(languageManager.localized("game_center"))
                                             .font(.headline)
-                                        Text("XP, Logros, Trofeos y Recompensas diarias")
+                                        Text(languageManager.localized("gamification_subtitle"))
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                     }
