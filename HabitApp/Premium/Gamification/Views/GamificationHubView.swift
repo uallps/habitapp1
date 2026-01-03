@@ -17,7 +17,6 @@ struct GamificationHubView: View {
     @Namespace private var animation
     @Environment(\.dismiss) private var dismiss
     
-    @MainActor
     enum GamificationTab: String, CaseIterable {
         case profile
         case achievements
@@ -33,12 +32,12 @@ struct GamificationHubView: View {
             }
         }
         
-        func displayName(lang: LanguageManager) -> String {
+        var localizationKey: String {
             switch self {
-            case .profile: return lang.localized("profile")
-            case .achievements: return lang.localized("achievements")
-            case .trophies: return lang.localized("trophies")
-            case .rewards: return lang.localized("rewards")
+            case .profile: return "profile"
+            case .achievements: return "achievements"
+            case .trophies: return "trophies"
+            case .rewards: return "rewards"
             }
         }
     }
@@ -246,7 +245,7 @@ struct GamificationHubView: View {
                     .font(.title3)
                     .frame(width: 24)
                 
-                Text(tab.displayName(lang: LanguageManager.shared))
+                Text(lang.localized(tab.localizationKey))
                     .font(.subheadline.weight(.medium))
                 
                 Spacer()
@@ -294,7 +293,7 @@ struct GamificationHubView: View {
                         .foregroundStyle(.white)
                 }
                 
-                Text(selectedTab.displayName(lang: LanguageManager.shared))
+                Text(lang.localized(selectedTab.localizationKey))
                     .font(.title2.weight(.bold))
             }
             
@@ -381,7 +380,7 @@ struct GamificationHubView: View {
                 Image(systemName: tab.icon)
                     .font(.system(size: 14, weight: .semibold))
                 
-                Text(tab.displayName(lang: LanguageManager.shared))
+                Text(lang.localized(tab.localizationKey))
                     .font(.subheadline.weight(.semibold))
             }
             .foregroundStyle(selectedTab == tab ? .white : .primary)
