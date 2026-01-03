@@ -76,6 +76,9 @@ jobs:
     - name: 📋 Show Xcode version
       run: xcodebuild -version
     
+    - name: � Create logs directory
+      run: mkdir -p build/logs
+    
     - name: 🔨 Build for testing
       run: |
         xcodebuild build-for-testing \
@@ -86,7 +89,17 @@ jobs:
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
-          | xcpretty --color && exit ${PIPESTATUS[0]}
+          2>&1 | tee build/logs/build.log | xcpretty --color && exit ${PIPESTATUS[0]}
+    
+    - name: 📤 Upload build logs
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: ads-module-build-logs
+        path: |
+          build/logs/
+          ~/Library/Developer/Xcode/DerivedData/**/Logs/
+        retention-days: 14
 
   # ============================================
   # JOB 3: Module Tests
@@ -103,6 +116,9 @@ jobs:
     - name: 🔧 Select Xcode version
       run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
     
+    - name: 📁 Create logs directory
+      run: mkdir -p build/logs
+    
     - name: 🧪 Run Ads Module Tests
       run: |
         xcodebuild test \
@@ -114,14 +130,17 @@ jobs:
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
-          | xcpretty --color && exit ${PIPESTATUS[0]}
+          -resultBundlePath build/logs/TestResults.xcresult \
+          2>&1 | tee build/logs/test.log | xcpretty --color && exit ${PIPESTATUS[0]}
     
     - name: 📊 Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: ads-module-test-results
-        path: build/reports/
+        path: |
+          build/logs/
+          build/reports/
         retention-days: 14
 
   # ============================================

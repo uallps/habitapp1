@@ -249,7 +249,7 @@ struct RecapView: View {
         let rate: Double = {
             guard totalHabits > 0 else { return 0 }
             
-            let daysCount = daysInPeriod
+            _ = daysInPeriod
             let completionsPerDay = completionStore.getUniqueCompletionsPerDay(in: dateRange)
             
             var totalPossible = 0

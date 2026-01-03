@@ -11,6 +11,7 @@ import Combine
 
 // MARK: - Base Module Protocol
 /// Protocolo base que todos los módulos deben implementar
+@MainActor
 protocol ModuleProtocol: AnyObject {
     /// Identificador único del módulo
     static var moduleId: String { get }
@@ -36,6 +37,7 @@ protocol ModuleProtocol: AnyObject {
 
 // MARK: - Ads Module Protocol (Avilés)
 /// Protocolo para el módulo de anuncios
+@MainActor
 protocol AdsModuleProtocol: ModuleProtocol {
     /// Indica si los anuncios están configurados
     var isAdMobConfigured: Bool { get }
@@ -58,6 +60,7 @@ protocol AdsModuleProtocol: ModuleProtocol {
 
 // MARK: - Media 3D Module Protocol (Lucas)
 /// Protocolo para el módulo de modelado 3D e imágenes al completar hábito
+@MainActor
 protocol Media3DModuleProtocol: ModuleProtocol {
     /// Indica si el dispositivo soporta captura 3D
     var supports3DCapture: Bool { get }
@@ -73,15 +76,16 @@ protocol Media3DModuleProtocol: ModuleProtocol {
     func cancelCapture()
     
     /// Vista para captura de objetos 3D
-    @MainActor func captureView() -> AnyView
+    func captureView() -> AnyView
     
     /// Vista para visualizar modelo 3D
     /// - Parameter modelURL: URL del modelo a visualizar
-    @MainActor func viewerView(for modelURL: URL) -> AnyView
+    func viewerView(for modelURL: URL) -> AnyView
 }
 
 // MARK: - AI Habit Generation Module Protocol (Diego)
 /// Protocolo para el módulo de generación de hábitos con IA desde imagen
+@MainActor
 protocol AIHabitModuleProtocol: ModuleProtocol {
     /// Indica si el servicio de IA está configurado
     var isConfigured: Bool { get }
@@ -96,7 +100,7 @@ protocol AIHabitModuleProtocol: ModuleProtocol {
     func analyzeImage(_ imageData: Data, completion: @escaping (Result<HabitSuggestionData, Error>) -> Void)
     
     /// Vista principal de cámara para captura de hábitos con IA
-    @MainActor func cameraView() -> AnyView
+    func cameraView() -> AnyView
 }
 
 /// Estructura de datos para sugerencia de hábito (desacoplada del modelo interno)
@@ -112,6 +116,7 @@ struct HabitSuggestionData {
 
 // MARK: - Recaps Module Protocol (Jorge)
 /// Protocolo para el módulo de recaps/resúmenes de hábitos
+@MainActor
 protocol RecapsModuleProtocol: ModuleProtocol {
     /// Tipos de periodo disponibles para recaps
     var availablePeriods: [String] { get }
@@ -122,7 +127,7 @@ protocol RecapsModuleProtocol: ModuleProtocol {
     
     /// Vista de recap para un periodo específico
     /// - Parameter period: Periodo del recap
-    @MainActor func recapView(for period: String) -> AnyView
+    func recapView(for period: String) -> AnyView
 }
 
 /// Estructura de datos para recap (desacoplada del modelo interno)
@@ -137,6 +142,7 @@ struct RecapData {
 
 // MARK: - Language Module Protocol (Nieto)
 /// Protocolo para el módulo de multilengüaje
+@MainActor
 protocol LanguageModuleProtocol: ModuleProtocol {
     /// Idioma actual
     var currentLanguage: String { get set }
@@ -161,6 +167,7 @@ protocol LanguageModuleProtocol: ModuleProtocol {
 
 // MARK: - Appearance Module Protocol (Avilés)
 /// Protocolo para el módulo de modo oscuro/claro
+@MainActor
 protocol AppearanceModuleProtocol: ModuleProtocol {
     /// Modo de apariencia actual
     var currentMode: AppearanceModeType { get set }
@@ -188,6 +195,7 @@ enum AppearanceModeType: String, CaseIterable {
 
 // MARK: - Module Factory Protocol
 /// Protocolo para factory que crea instancias de módulos
+@MainActor
 protocol ModuleFactoryProtocol {
     associatedtype ModuleType: ModuleProtocol
     
