@@ -184,8 +184,8 @@ struct AchievementTests {
         // Create a test achievement
         var achievement = Achievement(
             id: "test_progress",
-            name: "Test Progress",
-            description: "Test",
+            nameKey: "test_progress_name",
+            descriptionKey: "test_progress_desc",
             category: .streak,
             rarity: .common,
             iconName: "star",
