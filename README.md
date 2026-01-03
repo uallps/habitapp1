@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.icons8.com/3d-fluency/188/bullseye.png" alt="HabitApp Logo" width="120"/>
+  <img src="HabitApp/Assets.xcassets/AppIcon.appiconset/icon 1.png" alt="HabitApp Logo" width="120"/>
 </p>
 
 <h1 align="center">🎯 HabitApp</h1>
