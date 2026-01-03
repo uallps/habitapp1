@@ -1,141 +1,460 @@
+<p align="center">
+  <img src="https://img.icons8.com/3d-fluency/188/bullseye.png" alt="HabitApp Logo" width="120"/>
+</p>
 
-# HabitApp – Visión y Producto Mínimo Viable
+<h1 align="center">🎯 HabitApp</h1>
 
-[![iOS CI/CD](https://github.com/uallps/habitapp1/actions/workflows/ios.yml/badge.svg)](https://github.com/uallps/habitapp1/actions/workflows/ios.yml)
-[![Gamification Module](https://github.com/uallps/habitapp1/actions/workflows/module-gamification.yml/badge.svg)](https://github.com/uallps/habitapp1/actions/workflows/module-gamification.yml)
-[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
-[![Platform](https://img.shields.io/badge/Platform-iOS%2026+-blue.svg)](https://www.apple.com/ios/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+<p align="center">
+  <strong>Tu compañero inteligente para construir hábitos que transforman tu vida</strong>
+</p>
 
-> Documento de equipo y visión inicial del producto.  
-> **Última actualización:** 03-01-2026
+<p align="center">
+  <a href="https://github.com/uallps/habitapp1/actions/workflows/ios.yml">
+    <img src="https://github.com/uallps/habitapp1/actions/workflows/ios.yml/badge.svg" alt="iOS CI/CD"/>
+  </a>
+  <a href="https://github.com/uallps/habitapp1/actions/workflows/module-gamification.yml">
+    <img src="https://github.com/uallps/habitapp1/actions/workflows/module-gamification.yml/badge.svg" alt="Gamification"/>
+  </a>
+  <img src="https://img.shields.io/badge/Swift-5.9-F05138?logo=swift&logoColor=white" alt="Swift"/>
+  <img src="https://img.shields.io/badge/iOS-26+-007AFF?logo=apple&logoColor=white" alt="iOS"/>
+  <img src="https://img.shields.io/badge/SwiftUI-4.0-0071E3?logo=swift&logoColor=white" alt="SwiftUI"/>
+  <img src="https://img.shields.io/badge/Xcode-16.3-1575F9?logo=xcode&logoColor=white" alt="Xcode"/>
+  <img src="https://img.shields.io/badge/License-MIT-success" alt="License"/>
+</p>
 
----
-
-## 🧭 Tabla de contenidos
-- [Miembros del equipo](#miembros-del-equipo)
-- [Visión de HabitApp](#visión-de-habitapp)
-- [Funcionalidades del MVP](#funcionalidades-del-mvp)
-- [Módulos Implementados](#módulos-implementados)
-- [Sistema de Gamificación](#sistema-de-gamificación)
-- [Funcionalidades extra (posibles expansiones)](#funcionalidades-extra-posibles-expansiones)
-- [Documentación](#documentación)
-- [Créditos y referencias](#créditos-y-referencias)
-
----
-
-## Miembros del equipo
-Ordenados alfabéticamente por **primer apellido** (convención habitual en ES). Completa los enlaces con la información real.
-
-| # | Nombre completo | GitHub |
-|---:|---|---|
-| 1 | **Alejandro Avilés Fernández** | [github.com/aaf925](https://github.com/aaf925) |
-| 2 | **Lucas Barrientos Muñoz** | [github.com/lbm410](https://github.com/lbm410) |
-| 3 | **Diego Castañeda Cortés** | [github.com/dcc0230](https://github.com/dcc0230) |
-| 4 | **Jorge González Muñoz** | [github.com/ualjgm847](https://github.com/jgm847) |
-| 5 | **Antonio Rafael Nieto Mora** | [github.com/ualanm020](https://github.com/anm020) |
+<p align="center">
+  <a href="#-características">Características</a> •
+  <a href="#-capturas">Capturas</a> •
+  <a href="#-instalación">Instalación</a> •
+  <a href="#-arquitectura">Arquitectura</a> •
+  <a href="#-gamificación">Gamificación</a> •
+  <a href="#-equipo">Equipo</a>
+</p>
 
 ---
 
-## Visión de HabitApp
-La formación de buenos hábitos se ha convertido en una prioridad para muchas personas, lo que ha dado lugar a un **auge de las aplicaciones de seguimiento de hábitos**. El mercado global de estas apps se estimó en **USD 11,41 mil millones en 2024** y podría crecer hasta 38,36 mil millones para 2033 (aprox. +14% CAGR) [(Business Research Insights)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-apps-market-109438#:~:text=Se%20prev%C3%A9%20que%20el%20tama%C3%B1o,durante%20el%20per%C3%ADodo%20de%20pron%C3%B3stico). Existen numerosas aplicaciones populares que ayudan a monitorizar rutinas – desde opciones sencillas centradas en registrar tareas diarias hasta plataformas con enfoques más **gamificados** o con **análisis detallados** – reflejando la fuerte competencia y demanda en este sector [(Xataka, listado de apps)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20aplicaci%C3%B3n%20que%20fusiona%20el,mes%20tendr%C3%A1s%20items%20de%20bonificaci%C3%B3n). Muchas de estas apps ofrecen funciones comunes como **recordatorios**, **calendarios de progreso**, **contadores de rachas** (días consecutivos cumpliendo un hábito) y estadísticas básicas para motivar al usuario [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20aplicaci%C3%B3n%20te%20ofrece%20uno,de%20una%20app%20como%20esta). Sin embargo, también están surgiendo características más avanzadas (integración con datos de salud, comunidades de usuarios, IA, etc.) para diferenciarse y aumentar la adherencia de los usuarios [(Business Research Insights)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-app-market-117491#:~:text=El%20mercado%20para%20aplicaciones%20de,de%20la%20comunidad%20y%20gamificaci%C3%B3n).
+## ✨ ¿Qué es HabitApp?
 
+**HabitApp** es una aplicación iOS moderna y elegante diseñada para ayudarte a **construir hábitos positivos** y **alcanzar tus metas**. Combina una interfaz intuitiva con un potente sistema de gamificación que hace que desarrollar nuevos hábitos sea **divertido y motivador**.
 
-**HabitApp** nace con la visión de ofrecer una **app de hábitos generalista y accesible**, no limitada a un nicho específico, que ayude a cualquier usuario a **desarrollar y mantener hábitos saludables** de forma efectiva. Queremos diferenciarnos en un mercado concurrido aportando valor añadido y combinando las **mejores prácticas**: una interfaz simple e intuitiva, seguimiento claro del progreso y mecanismos de motivación que fomenten la constancia. La aplicación será **multilingüe (español e inglés)** desde el inicio para llegar a una audiencia más amplia. La **propuesta de valor** de HabitApp se centra en brindar al usuario una experiencia equilibrada entre simplicidad y funcionalidad: incluirá elementos probados como **recordatorios inteligentes y rachas visuales** para reforzar el compromiso diario [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20aplicaci%C3%B3n%20te%20ofrece%20uno,de%20una%20app%20como%20esta), junto con opciones de personalización para adaptarse a las metas individuales de cada usuario. A futuro, HabitApp explorará funcionalidades **innovadoras** (por ejemplo, componentes de **comunidad** o **gamificación**) que están marcando tendencia al hacer más fácil y entretenido el proceso de formar hábitos [(Business Research Insights)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-app-market-117491#:~:text=El%20mercado%20para%20aplicaciones%20de,de%20la%20comunidad%20y%20gamificaci%C3%B3n). En definitiva, la visión es que HabitApp se convierta en un **asistente integral para la formación de hábitos**, capaz de competir con las mejores apps del mercado aportando una experiencia motivadora, flexible y respaldada por las estrategias que sabemos que funcionan en la creación de hábitos positivos.
+<table>
+<tr>
+<td width="50%">
 
----
+### 🎮 Gamificación Completa
+- Sistema de XP y 10 niveles de progresión
+- 26 logros en 6 categorías
+- 10 trofeos coleccionables
+- Recompensas diarias
 
-## Funcionalidades del MVP
-- **Creación y gestión de hábitos:** Permitir al usuario **crear hábitos personalizados** indicando nombre, descripción y frecuencia (diario, varios días por semana, etc.). Se podrá configurar qué días de la semana realizar cada hábito [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20aplicaci%C3%B3n%20te%20va%20a,que%20no%20se%20te%20olvide), abarcando desde hábitos cotidianos (ej.: “beber 8 vasos de agua”) hasta metas semanales.
-- **Registro diario de cumplimiento:** El usuario podrá **marcar cada día si realizó o no cada hábito**, registrando su progreso de forma simple (p. ej. con un toque). La app mostrará un **contador de rachas** de días consecutivos cumpliendo el hábito para incentivar la constancia [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20aplicaci%C3%B3n%20para%20iOS%2C%20con,progresos%2C%20todos%20ellos%20completamente%20personalizables).
-- **Recordatorios y notificaciones:** Posibilidad de programar **recordatorios diarios** para cada hábito a una hora determinada, de modo que el usuario reciba notificaciones que le ayuden a recordar sus nuevos hábitos [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20aplicaci%C3%B3n%20te%20va%20a,que%20no%20se%20te%20olvide). (Por ejemplo: _“20:00 – ¡Hora de meditar 10 minutos!”_).
-- **Visualización básica del progreso:** Incluir una forma sencilla de **ver el progreso** de cada hábito a lo largo del tiempo. Por ejemplo, un **calendario** o lista que muestre qué días se cumplió el hábito y estadísticas simples de cumplimiento (porcentaje semanal, mejores rachas, etc.) [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20aplicaci%C3%B3n%20te%20ofrece%20uno,de%20una%20app%20como%20esta).
-- **Interfaz intuitiva y atractiva:** Diseño enfocado en la **usabilidad**, con pantalla principal que liste los hábitos y su estado del día, y facilidad para marcar acciones. Se priorizará una interfaz limpia donde _“no falten todos los datos”_ relevantes pero sin abrumar [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20aplicaci%C3%B3n%20que%20busca%20combinar,sincronizaci%C3%B3n%20en%20todos%20tus%20dispositivos). La app será **bilingüe (español/inglés)** para atraer a usuarios de ambos idiomas.
-- **Funcionamiento offline y datos locales:** El MVP almacenará los datos de hábitos y registros **localmente en el dispositivo**, de forma segura. Así, el usuario podrá usar la app en cualquier momento (incluso sin conexión) sin perder sus registros. _(Nota: funciones como copias de seguridad en la nube se consideran para etapas posteriores.)_
+</td>
+<td width="50%">
 
----
+### 🤖 Potenciado por IA
+- Sugerencias de hábitos con GPT-4 Vision
+- Análisis inteligente de progreso
+- Recomendaciones personalizadas
 
-## Módulos Implementados
+</td>
+</tr>
+<tr>
+<td width="50%">
 
-HabitApp utiliza una **arquitectura modular** basada en el Plugin Pattern. Cada módulo es independiente y se registra mediante inyección de dependencias.
+### 📸 Multimedia Avanzado
+- Captura de fotos para hábitos
+- Modelado 3D con LiDAR
+- Resúmenes visuales tipo "stories"
 
-| Módulo | Autor | Descripción |
-|--------|-------|-------------|
-| 📢 **Anuncios** | Avilés | Gestión de anuncios AdMob |
-| 📸 **Media 3D** | Lucas | Captura de fotos y modelos 3D con LiDAR |
-| 🤖 **IA para Hábitos** | Diego | Sugerencias de hábitos con GPT-4 Vision |
-| 📊 **Recaps** | Jorge | Resúmenes visuales tipo "stories" |
-| 🌍 **Multilenguaje** | Nieto | Internacionalización (ES/EN) |
-| 🎨 **Apariencia** | Avilés | Modo claro/oscuro/auto |
-| 🎮 **Gamificación** | Lucas | XP, niveles, logros, trofeos, recompensas diarias |
+</td>
+<td width="50%">
 
-Ver [ARQUITECTURA_MODULAR.md](docs/ARQUITECTURA_MODULAR.md) para detalles técnicos.
+### 🌍 Experiencia Premium
+- Multilenguaje (ES/EN)
+- Modo claro/oscuro/auto
+- Estadísticas detalladas
 
----
-
-## Sistema de Gamificación
-
-### 🏆 Características
-
-- **Sistema de XP y Niveles**: 10 niveles desde "Novato" hasta "Inmortal"
-- **26 Logros**: En 6 categorías (Rachas, Completados, Consistencia, Explorador, Social, Especiales)
-- **10 Trofeos**: En 5 tiers (Bronce, Plata, Oro, Platino, Diamante)
-- **Recompensas Diarias**: Ciclo de 7 días con multiplicadores por racha
-
-### 📊 Tabla de Niveles
-
-| Nivel | Nombre | XP Requerido |
-|-------|--------|--------------|
-| 1 | Novato | 0-100 |
-| 2 | Aprendiz | 100-300 |
-| 3 | Dedicado | 300-600 |
-| 4 | Constante | 600-1,000 |
-| 5 | Experto | 1,000-1,500 |
-| 6 | Maestro | 1,500-2,200 |
-| 7 | Leyenda | 2,200-3,000 |
-| 8 | Héroe | 3,000-4,000 |
-| 9 | Campeón | 4,000-5,500 |
-| 10 | Inmortal | 5,500+ |
-
-### 🎯 Cómo ganar XP
-
-- ✅ Completar un hábito: **+5 XP**
-- 🔥 Bonus por racha: **+2 XP × días** (máx 20)
-- 🏅 Desbloquear logros: **+10-200 XP**
-- 🏆 Obtener trofeos: **+50-1000 XP**
-- 🎁 Recompensas diarias: **+5-50 XP**
-
-Ver [MODULO_GAMIFICACION.md](docs/modules/MODULO_GAMIFICACION.md) para documentación completa.
+</td>
+</tr>
+</table>
 
 ---
 
-## Funcionalidades extra (posibles expansiones)
-- **Gamificación y recompensas:** Incorporar elementos de **gamificación** para hacer más divertida la experiencia. Por ejemplo, otorgar **puntos, insignias o recompensas virtuales** al cumplir ciertos hitos (x días seguidos, metas mensuales logradas, etc.). Esto puede incluir un sistema de “niveles” o **logros** que celebran el progreso del usuario, similar a cómo **Habitica** transforma los hábitos en un juego de rol con recompensas en forma de oro o ítems [(ClickUp – guía de apps)](https://clickup.com/es-ES/blog/30902/best-habit-tracker-app#:~:text=A%20diferencia%20de%20la%20mayor%C3%ADa,personal%20sea%20divertido%20y%20motivador). La gamificación busca aumentar la motivación y hacer del desarrollo personal una **“aventura”** atractiva [(ClickUp)](https://clickup.com/es-ES/blog/30902/best-habit-tracker-app#:~:text=A%20diferencia%20de%20la%20mayor%C3%ADa,personal%20sea%20divertido%20y%20motivador).
-- **Funciones sociales y comunidad:** Añadir la opción de **compartir progresos** o realizar hábitos en grupo. Por ejemplo, el usuario podría **conectar con amigos** dentro de la app para ver los logros de cada uno, o unirse a **retos comunitarios** (ej.: _“30 días sin fumar”_ con un grupo). Las características de **comunidad** han demostrado facilitar la formación de hábitos al hacer el proceso más social y entretenido [(Business Research Insights)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-app-market-117491#:~:text=El%20mercado%20de%20aplicaciones%20de,del%20cliente%20y%20la%20satisfacci%C3%B3n).
-- **Integración con salud y dispositivos externos:** Permitir la **integración con otras apps y hardware** para automatizar el seguimiento. Por ejemplo, sincronización con **Apple Health / Google Fit** u otros servicios, de modo que ciertos hábitos (p. ej. “caminar 10.000 pasos”) se marquen automáticamente al alcanzar la meta según los datos del teléfono/reloj inteligente [(Zapier – guía)](https://zapier.com/blog/best-habit-tracker-app/#:~:text=But%20perhaps%20the%20most%20interesting,subscription%E2%80%94whatever%20it%20actually%20costs%20you). También podría integrarse con el calendario o asistentes de voz (Siri, Google Assistant) para añadir hábitos mediante comandos de voz o recibir briefing diario de tareas.
-- **Estadísticas avanzadas e inteligencia artificial:** Una vez superado el MVP, se podrían ofrecer **métricas más avanzadas** y análisis en profundidad. Por ejemplo, **gráficos detallados** de tendencia semanal/mensual, identificación de patrones (días más exitosos, correlación entre hábitos) y un “panel” de salud/hábitos integral. Asimismo, implementar **IA** para proporcionar _insights_ o recomendaciones personalizadas: la app podría sugerir **nuevos hábitos** apropiados según los intereses del usuario, o dar consejos para mejorar (p. ej., notificar _“sueles fallar los martes, intenta programar el hábito a otra hora”_). El uso de algoritmos de **IA** permitiría **recomendaciones dirigidas** al estilo coach digital, e incluso adaptar la experiencia según el comportamiento de cada persona [(Business Research Insights)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-app-market-117491#:~:text=El%20crecimiento%20del%20mercado%20en,est%C3%A1%20impulsado%20por%20AI%2C%20IoT).
-- **Multiplataforma y sincronización en la nube:** Extender HabitApp más allá de iOS. Una versión en **Android** y/o una **web app** permitirían llegar a más usuarios. Junto con esto, habilitar **sincronización en la nube** para que el usuario pueda acceder a sus hábitos desde múltiples dispositivos (por ejemplo, usando la cuenta para mantener sus datos en iPhone, iPad o teléfono Android). Varias apps líderes ya ofrecen sincronización multiplataforma para mayor comodidad [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20aplicaci%C3%B3n%20que%20busca%20combinar,sincronizaci%C3%B3n%20en%20todos%20tus%20dispositivos), por lo que incorporar esta capacidad ayudaría a HabitApp a competir a la par en términos de **accesibilidad**.
-- **Contenido guiado y rutinas recomendadas:** Añadir módulos de **rutinas predefinidas** o planes de hábitos podría enriquecer la app. Por ejemplo, ofrecer **programas de 21 días** con pasos graduales, inspirados en técnicas de coaching. Apps como _Fabulous_ incluyen “programas de entrenamiento” con objetivos inteligentes y coaching personal [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Una%20magn%C3%ADfica%20aplicaci%C3%B3n%20que%20no,fines%2C%20y%20un%20entrenador%20personal). HabitApp podría incorporar secciones educativas con **consejos diarios**, **motivación adicional** (frases inspiradoras, técnicas de *Atomic Habits*, etc.) y la posibilidad de seguir un plan guiado.
-- **Seguimiento de “malos hábitos”:** Además de fomentar hábitos positivos, HabitApp podría incluir una sección para **monitorear hábitos que se quieren dejar** (p. ej., fumar, consumo de refrescos, redes sociales excesivas). Esta funcionalidad permitiría registrar el tiempo desde la última vez que se incurrió en el hábito a eliminar y contar **rachas de abstinencia**, mostrando métricas motivadoras como **tiempo o dinero ahorrado** [(Xataka)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone#:~:text=Esta%20es%20una%20aplicaci%C3%B3n%20que,te%20ayude%20a%20dejarlos%20atr%C3%A1s).
+## 🚀 Características
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/checklist.png" width="60"/><br/>
+<strong>Gestión de Hábitos</strong><br/>
+<sub>Crea, personaliza y organiza tus hábitos diarios</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/fire-element.png" width="60"/><br/>
+<strong>Rachas Motivadoras</strong><br/>
+<sub>Mantén el impulso con contadores de días consecutivos</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/bell.png" width="60"/><br/>
+<strong>Recordatorios</strong><br/>
+<sub>Notificaciones inteligentes para no olvidar</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/combo-chart.png" width="60"/><br/>
+<strong>Estadísticas</strong><br/>
+<sub>Visualiza tu progreso con gráficos detallados</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/trophy.png" width="60"/><br/>
+<strong>Logros y Trofeos</strong><br/>
+<sub>Desbloquea recompensas por tu esfuerzo</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/camera.png" width="60"/><br/>
+<strong>Fotos y 3D</strong><br/>
+<sub>Documenta tus hábitos visualmente</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/brain.png" width="60"/><br/>
+<strong>IA Integrada</strong><br/>
+<sub>Sugerencias personalizadas con GPT-4</sub>
+</td>
+<td align="center" width="25%">
+<img src="https://img.icons8.com/3d-fluency/94/gift.png" width="60"/><br/>
+<strong>Recompensas Diarias</strong><br/>
+<sub>XP bonus por login consecutivo</sub>
+</td>
+</tr>
+</table>
+
 ---
 
-## Documentación
+## 📱 Capturas
+
+<p align="center">
+  <i>📸 Capturas de pantalla próximamente...</i>
+</p>
+
+<!--
+<p align="center">
+  <img src="screenshots/home.png" width="200"/>
+  <img src="screenshots/habits.png" width="200"/>
+  <img src="screenshots/gamification.png" width="200"/>
+  <img src="screenshots/stats.png" width="200"/>
+</p>
+-->
+
+---
+
+## 🛠 Instalación
+
+### Requisitos
+
+| Requisito | Versión |
+|-----------|---------|
+| macOS | Sequoia 26.0+ |
+| Xcode | 16.3+ |
+| iOS Deployment Target | 26.0+ |
+| Swift | 5.9+ |
+
+### Pasos
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/uallps/habitapp1.git
+
+# 2. Navegar al directorio
+cd habitapp1
+
+# 3. Abrir en Xcode
+open HabitApp.xcodeproj
+
+# 4. Configurar credenciales (opcional)
+cp HabitApp/Config/Secrets.plist.example HabitApp/Config/Secrets.plist
+# Editar Secrets.plist con tus API keys
+
+# 5. Build & Run
+# ⌘ + R en Xcode
+```
+
+### Configuración de API Keys
+
+Para habilitar todas las funcionalidades, configura estas claves en `Secrets.plist`:
+
+| Clave | Descripción | Requerido |
+|-------|-------------|-----------|
+| `OpenAI_API_Key` | Para sugerencias de hábitos con IA | Opcional |
+| `AdMob_App_ID` | Para anuncios (versión gratuita) | Opcional |
+
+---
+
+## 🏗 Arquitectura
+
+HabitApp implementa una **arquitectura modular** basada en el **Plugin Pattern** que permite añadir funcionalidades sin modificar el núcleo.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     🎯 HabitApp Core                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
+│  │ ContentView │  │ HabitStore  │  │  AppConfig  │          │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘          │
+│         └────────────────┼────────────────┘                  │
+│                          ▼                                   │
+│              ┌───────────────────────┐                       │
+│              │   📦 ModuleRegistry   │                       │
+│              │   (Service Locator)   │                       │
+│              └───────────┬───────────┘                       │
+└──────────────────────────┼───────────────────────────────────┘
+                           │
+     ┌─────────────────────┼─────────────────────┐
+     │           │         │         │           │
+     ▼           ▼         ▼         ▼           ▼
+┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
+│ 📢 Ads  │ │ 📸 3D   │ │ 🤖 AI   │ │ 📊 Recap│ │ 🎮 Game │
+│ Module  │ │ Module  │ │ Module  │ │ Module  │ │ Module  │
+└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
+```
+
+### Módulos Disponibles
+
+| Módulo | Autor | Estado | Descripción |
+|--------|-------|:------:|-------------|
+| 📢 **Anuncios** | Avilés | ✅ | Gestión de anuncios AdMob para versión gratuita |
+| 📸 **Media 3D** | Lucas | ✅ | Captura de fotos y modelos 3D con LiDAR |
+| 🤖 **IA para Hábitos** | Diego | ✅ | Sugerencias inteligentes con GPT-4 Vision |
+| 📊 **Recaps** | Jorge | ✅ | Resúmenes visuales tipo Instagram Stories |
+| 🌍 **Multilenguaje** | Nieto | ✅ | Internacionalización (Español/Inglés) |
+| 🎨 **Apariencia** | Avilés | ✅ | Modo claro/oscuro/automático |
+| 🎮 **Gamificación** | Lucas | ✅ | XP, niveles, logros, trofeos, rewards |
+
+---
+
+## 🎮 Gamificación
+
+El corazón de HabitApp es su **sistema de gamificación** que transforma la formación de hábitos en una experiencia motivadora y divertida.
+
+### 🏆 Sistema de Niveles
+
+<table>
+<tr>
+<th>Nivel</th>
+<th>Nombre</th>
+<th>XP Requerido</th>
+<th>Icono</th>
+</tr>
+<tr><td align="center">1</td><td>Novato</td><td>0 - 100</td><td>⭐</td></tr>
+<tr><td align="center">2</td><td>Aprendiz</td><td>100 - 300</td><td>⭐</td></tr>
+<tr><td align="center">3</td><td>Dedicado</td><td>300 - 600</td><td>⭐</td></tr>
+<tr><td align="center">4</td><td>Constante</td><td>600 - 1,000</td><td>⭐</td></tr>
+<tr><td align="center">5</td><td>Experto</td><td>1,000 - 1,500</td><td>⭐</td></tr>
+<tr><td align="center">6</td><td>Maestro</td><td>1,500 - 2,200</td><td>⭐</td></tr>
+<tr><td align="center">7</td><td>Leyenda</td><td>2,200 - 3,000</td><td>👑</td></tr>
+<tr><td align="center">8</td><td>Héroe</td><td>3,000 - 4,000</td><td>👑</td></tr>
+<tr><td align="center">9</td><td>Campeón</td><td>4,000 - 5,500</td><td>🏆</td></tr>
+<tr><td align="center">10</td><td>Inmortal</td><td>5,500+</td><td>🏆</td></tr>
+</table>
+
+### 💰 Cómo Ganar XP
+
+| Acción | XP | Descripción |
+|--------|:--:|-------------|
+| ✅ Completar hábito | +5 | Por cada hábito completado |
+| 🔥 Bonus de racha | +2-20 | +2 XP por cada día de racha (máx 10 días) |
+| 🏅 Desbloquear logro | +10-200 | Según rareza del logro |
+| 🏆 Obtener trofeo | +50-1000 | Según tier del trofeo |
+| 🎁 Recompensa diaria | +5-50 | Ciclo de 7 días |
+
+### 🏅 Logros (26 total)
+
+<table>
+<tr>
+<td align="center" width="16%">
+<strong>🔥 Rachas</strong><br/>
+<sub>6 logros</sub>
+</td>
+<td align="center" width="16%">
+<strong>✅ Completados</strong><br/>
+<sub>6 logros</sub>
+</td>
+<td align="center" width="16%">
+<strong>📅 Consistencia</strong><br/>
+<sub>4 logros</sub>
+</td>
+<td align="center" width="16%">
+<strong>🧭 Explorador</strong><br/>
+<sub>5 logros</sub>
+</td>
+<td align="center" width="16%">
+<strong>👥 Social</strong><br/>
+<sub>0 logros</sub>
+</td>
+<td align="center" width="16%">
+<strong>⭐ Especiales</strong><br/>
+<sub>5 logros</sub>
+</td>
+</tr>
+</table>
+
+### 🏆 Trofeos (10 total)
+
+| Tier | Cantidad | XP Bonus | Ejemplos |
+|------|:--------:|:--------:|----------|
+| 🥉 **Bronce** | 2 | +50 | Iniciado, Persistente |
+| 🥈 **Plata** | 2 | +100 | Dedicado, Inquebrantable |
+| 🥇 **Oro** | 2 | +200 | Maestro, Leyenda Viviente |
+| 💎 **Platino** | 2 | +400 | Élite, Coleccionista |
+| 💠 **Diamante** | 2 | +1000 | Inmortal, Perfección |
+
+### 🎁 Recompensas Diarias
+
+| Día | Recompensa | Día | Recompensa |
+|:---:|:----------:|:---:|:----------:|
+| 1 | 5 XP | 5 | 25 XP |
+| 2 | 10 XP | 6 | 30 XP |
+| 3 | 15 XP | 7 | **50 XP** 🎉 |
+| 4 | 20 XP | | |
+
+> 💡 **Tip:** ¡Cada semana completa de login consecutivo aumenta tu multiplicador de XP!
+
+---
+
+## 🧪 Testing
+
+```bash
+# Ejecutar todos los tests
+xcodebuild test -project HabitApp.xcodeproj -scheme HabitApp -destination 'platform=iOS Simulator,name=iPhone 17'
+
+# Tests de gamificación específicamente
+xcodebuild test -project HabitApp.xcodeproj -scheme HabitApp -only-testing:HabitAppTests/GamificationTests
+```
+
+### Cobertura de Tests
+
+| Módulo | Tests | Estado |
+|--------|:-----:|:------:|
+| Core | 15 | ✅ |
+| Gamificación | 25+ | ✅ |
+| Stores | 10 | ✅ |
+| Views | 8 | ✅ |
+
+---
+
+## 📚 Documentación
 
 | Documento | Descripción |
 |-----------|-------------|
-| [ARQUITECTURA_MODULAR.md](docs/ARQUITECTURA_MODULAR.md) | Arquitectura y patrones de diseño |
-| [ICONOS_GAMIFICACION.md](docs/ICONOS_GAMIFICACION.md) | Prompts para generar iconos de logros y trofeos |
-| [MODULO_GAMIFICACION.md](docs/modules/MODULO_GAMIFICACION.md) | Documentación completa del módulo de gamificación |
-| [MODULO_ANUNCIOS.md](docs/modules/MODULO_ANUNCIOS.md) | Módulo de anuncios AdMob |
-| [MODULO_MEDIA3D.md](docs/modules/MODULO_MEDIA3D.md) | Módulo de captura 3D |
-| [MODULO_AIHABIT.md](docs/modules/MODULO_AIHABIT.md) | Módulo de IA para hábitos |
-| [MODULO_RECAPS.md](docs/modules/MODULO_RECAPS.md) | Módulo de resúmenes |
-| [MODULO_LANGUAGE.md](docs/modules/MODULO_LANGUAGE.md) | Módulo de multilenguaje |
-| [MODULO_APPEARANCE.md](docs/modules/MODULO_APPEARANCE.md) | Módulo de apariencia |
+| 📐 [Arquitectura Modular](docs/ARQUITECTURA_MODULAR.md) | Patrones de diseño y estructura del proyecto |
+| 🎮 [Módulo Gamificación](docs/modules/MODULO_GAMIFICACION.md) | Sistema completo de XP, niveles y logros |
+| 🎨 [Iconos Gamificación](docs/ICONOS_GAMIFICACION.md) | Prompts para generar iconos de logros y trofeos |
+| 📢 [Módulo Anuncios](docs/modules/MODULO_ANUNCIOS.md) | Integración con Google AdMob |
+| 📸 [Módulo Media 3D](docs/modules/MODULO_MEDIA3D.md) | Captura de fotos y modelos 3D |
+| 🤖 [Módulo IA](docs/modules/MODULO_AIHABIT.md) | Sugerencias con GPT-4 Vision |
+| 📊 [Módulo Recaps](docs/modules/MODULO_RECAPS.md) | Resúmenes visuales |
+| 🌍 [Módulo Idiomas](docs/modules/MODULO_LANGUAGE.md) | Internacionalización |
+| 🎨 [Módulo Apariencia](docs/modules/MODULO_APPEARANCE.md) | Temas y modo oscuro |
+
 ---
 
-## Créditos y referencias
-- Informe de mercado y tendencias: [(Business Research Insights – mercado de apps de hábitos)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-apps-market-109438) · [(Business Research Insights – tendencias IA/comunidad)](https://www.businessresearchinsights.com/es/market-reports/habit-tracking-app-market-117491)
-- Listados comparativos y características: [(Xataka – 14 mejores apps de hábitos)](https://www.xataka.com/basics/14-mejores-aplicaciones-monitorizar-tus-nuevos-habitos-android-iphone)
-- Ejemplos de gamificación: [(ClickUp – guía de apps)](https://clickup.com/es-ES/blog/30902/best-habit-tracker-app)
-- Integraciones y ecosistema: [(Zapier – best habit tracker apps)](https://zapier.com/blog/best-habit-tracker-app/)
+## �� Roadmap
+
+- [x] **v1.0** - MVP: Gestión de hábitos, rachas, notificaciones
+- [x] **v1.1** - Arquitectura modular con Plugin Pattern
+- [x] **v1.2** - Sistema de gamificación completo
+- [x] **v1.3** - Integración con IA (GPT-4 Vision)
+- [ ] **v1.4** - Funciones sociales y comunidad
+- [ ] **v1.5** - Integración con Apple Health
+- [ ] **v2.0** - Sincronización en la nube
+
+---
+
+## 👥 Equipo
+
+<table>
+<tr>
+<td align="center" width="20%">
+<img src="https://github.com/aaf925.png" width="80" style="border-radius:50%"/><br/>
+<strong>Alejandro Avilés</strong><br/>
+<sub>📢 Ads & 🎨 Appearance</sub><br/>
+<a href="https://github.com/aaf925">@aaf925</a>
+</td>
+<td align="center" width="20%">
+<img src="https://github.com/lbm410.png" width="80" style="border-radius:50%"/><br/>
+<strong>Lucas Barrientos</strong><br/>
+<sub>📸 Media 3D & 🎮 Gamification</sub><br/>
+<a href="https://github.com/lbm410">@lbm410</a>
+</td>
+<td align="center" width="20%">
+<img src="https://github.com/dcc0230.png" width="80" style="border-radius:50%"/><br/>
+<strong>Diego Castañeda</strong><br/>
+<sub>🤖 AI for Habits</sub><br/>
+<a href="https://github.com/dcc0230">@dcc0230</a>
+</td>
+<td align="center" width="20%">
+<img src="https://github.com/jgm847.png" width="80" style="border-radius:50%"/><br/>
+<strong>Jorge González</strong><br/>
+<sub>📊 Recaps</sub><br/>
+<a href="https://github.com/jgm847">@jgm847</a>
+</td>
+<td align="center" width="20%">
+<img src="https://github.com/anm020.png" width="80" style="border-radius:50%"/><br/>
+<strong>Antonio R. Nieto</strong><br/>
+<sub>�� Language</sub><br/>
+<a href="https://github.com/anm020">@anm020</a>
+</td>
+</tr>
+</table>
+
+<p align="center">
+  <strong>Universidad de Almería</strong> • Línea de Productos Software • 4º Curso • 2025-2026
+</p>
+
+---
+
+## 📄 Licencia
+
+```
+MIT License
+
+Copyright (c) 2025-2026 HabitApp Team - Universidad de Almería
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+```
+
+---
+
+## 🙏 Agradecimientos
+
+- **Apple** por SwiftUI, RealityKit y las APIs de iOS
+- **OpenAI** por GPT-4 Vision
+- **Google** por AdMob SDK
+- **Icons8** por los iconos 3D Fluency
+- A todos los profesores y compañeros de la **Universidad de Almería**
+
+---
+
+<p align="center">
+  <strong>⭐ Si te gusta este proyecto, ¡dale una estrella! ⭐</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/uallps/habitapp1/issues">Reportar Bug</a> •
+  <a href="https://github.com/uallps/habitapp1/issues">Solicitar Feature</a> •
+  <a href="https://github.com/uallps/habitapp1/pulls">Contribuir</a>
+</p>
+
+<p align="center">
+  Made with ❤️ in Almería, Spain 🇪🇸
+</p>
