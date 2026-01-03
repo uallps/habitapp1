@@ -17,6 +17,7 @@ struct GamificationHubView: View {
     @Namespace private var animation
     @Environment(\.dismiss) private var dismiss
     
+    @MainActor
     enum GamificationTab: String, CaseIterable {
         case profile
         case achievements

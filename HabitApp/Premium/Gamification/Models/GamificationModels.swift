@@ -168,7 +168,7 @@ struct Achievement: Identifiable, Codable, Equatable {
         return min(Double(progress) / Double(requirement), 1.0)
     }
     
-    static func == (lhs: Achievement, rhs: Achievement) -> Bool {
+    nonisolated static func == (lhs: Achievement, rhs: Achievement) -> Bool {
         lhs.id == rhs.id
     }
     
@@ -545,7 +545,7 @@ struct Trophy: Identifiable, Codable, Equatable {
         LanguageManager.shared.localized(descriptionKey)
     }
     
-    static func == (lhs: Trophy, rhs: Trophy) -> Bool {
+    nonisolated static func == (lhs: Trophy, rhs: Trophy) -> Bool {
         lhs.id == rhs.id
     }
 }
