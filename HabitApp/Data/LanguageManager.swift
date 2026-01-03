@@ -265,7 +265,6 @@ class LanguageManager: ObservableObject {
             "uncomplete": "Desmarcar",
             "uncomplete_habit_message": "¿Estás seguro de que quieres desmarcar este hábito? Se eliminarán la nota y cualquier foto o modelo 3D asociado.",
             "model_not_found": "Modelo no encontrado",
-            "close": "Cerrar",
             
             // Gamification - General
             "game_center": "Centro de Juego",
@@ -395,7 +394,59 @@ class LanguageManager: ObservableObject {
             "current_streak": "Racha Actual",
             "total_completions": "Completados",
             "next_level": "Siguiente nivel",
-            "xp_remaining": "XP restantes"
+            "xp_remaining": "XP restantes",
+            
+            // Gamification - Achievement Detail
+            "achievement_detail": "Detalle del Logro",
+            "trophy_detail": "Detalle del Trofeo",
+            "close": "Cerrar",
+            "on_date": "el %@",
+            "achieved": "¡Conseguido!",
+            "not_achieved_yet": "Aún no conseguido",
+            "requirement": "Requisito",
+            "xp_bonus": "XP Bonus",
+            
+            // Gamification - Trophy Requirement Descriptions
+            "req_total_completions": "Completa %d hábitos en total",
+            "req_max_streak": "Alcanza una racha de %d días",
+            "req_monthly_perfect": "Logra %d meses perfectos",
+            "req_total_xp": "Acumula %d XP",
+            "req_level": "Alcanza el nivel %d",
+            "req_achievements": "Desbloquea %d logros",
+            
+            // Gamification - Trophies (Names)
+            "trophy_bronze_beginner": "Iniciado",
+            "trophy_bronze_streak": "Persistente",
+            "trophy_silver_dedicated": "Dedicado",
+            "trophy_silver_streak": "Inquebrantable",
+            "trophy_gold_master": "Maestro de Hábitos",
+            "trophy_gold_streak": "Leyenda Viviente",
+            "trophy_platinum_elite": "Élite",
+            "trophy_platinum_achiever": "Coleccionista",
+            "trophy_diamond_legend": "Inmortal",
+            "trophy_diamond_perfect": "Perfección",
+            
+            // Gamification - Trophies (Descriptions)
+            "trophy_bronze_beginner_desc": "Tus primeros pasos en el camino del hábito",
+            "trophy_bronze_streak_desc": "Demuestras que puedes mantener el ritmo",
+            "trophy_silver_dedicated_desc": "Tu compromiso es admirable",
+            "trophy_silver_streak_desc": "Un mes sin fallar, impresionante",
+            "trophy_gold_master_desc": "Has dominado el arte de la constancia",
+            "trophy_gold_streak_desc": "100 días de pura determinación",
+            "trophy_platinum_elite_desc": "Solo los más dedicados llegan aquí",
+            "trophy_platinum_achiever_desc": "Has desbloqueado la mayoría de logros",
+            "trophy_diamond_legend_desc": "Has alcanzado la cima. Eres una leyenda.",
+            "trophy_diamond_perfect_desc": "Un año completo de hábitos perfectos",
+            
+            // Gamification - Additional Achievement Names/Desc
+            "achievement_level_5": "Subiendo de Nivel",
+            "achievement_level_5_desc": "Alcanza el nivel 5",
+            "achievement_level_10": "Inmortal",
+            "achievement_level_10_desc": "Alcanza el nivel máximo",
+            "achievement_five_habits": "Organizador",
+            "achievement_five_habits_desc": "Crea 5 hábitos diferentes",
+            "achievement_ai_habit": "Visionario AI",
+            "achievement_ai_habit_desc": "Crea un hábito usando la cámara AI"
         ],
         "en": [
             // General
@@ -750,7 +801,58 @@ class LanguageManager: ObservableObject {
             "current_streak": "Current Streak",
             "total_completions": "Completions",
             "next_level": "Next level",
-            "xp_remaining": "XP remaining"
+            "xp_remaining": "XP remaining",
+            
+            // Gamification - Achievement Detail
+            "achievement_detail": "Achievement Detail",
+            "trophy_detail": "Trophy Detail",
+            "on_date": "on %@",
+            "achieved": "Achieved!",
+            "not_achieved_yet": "Not achieved yet",
+            "requirement": "Requirement",
+            "xp_bonus": "XP Bonus",
+            
+            // Gamification - Trophy Requirement Descriptions
+            "req_total_completions": "Complete %d habits in total",
+            "req_max_streak": "Reach a %d-day streak",
+            "req_monthly_perfect": "Achieve %d perfect months",
+            "req_total_xp": "Accumulate %d XP",
+            "req_level": "Reach level %d",
+            "req_achievements": "Unlock %d achievements",
+            
+            // Gamification - Trophies (Names)
+            "trophy_bronze_beginner": "Beginner",
+            "trophy_bronze_streak": "Persistent",
+            "trophy_silver_dedicated": "Dedicated",
+            "trophy_silver_streak": "Unbreakable",
+            "trophy_gold_master": "Habit Master",
+            "trophy_gold_streak": "Living Legend",
+            "trophy_platinum_elite": "Elite",
+            "trophy_platinum_achiever": "Collector",
+            "trophy_diamond_legend": "Immortal",
+            "trophy_diamond_perfect": "Perfection",
+            
+            // Gamification - Trophies (Descriptions)
+            "trophy_bronze_beginner_desc": "Your first steps on the habit path",
+            "trophy_bronze_streak_desc": "You show you can keep the pace",
+            "trophy_silver_dedicated_desc": "Your commitment is admirable",
+            "trophy_silver_streak_desc": "A month without failing, impressive",
+            "trophy_gold_master_desc": "You've mastered the art of consistency",
+            "trophy_gold_streak_desc": "100 days of pure determination",
+            "trophy_platinum_elite_desc": "Only the most dedicated get here",
+            "trophy_platinum_achiever_desc": "You've unlocked most achievements",
+            "trophy_diamond_legend_desc": "You've reached the top. You're a legend.",
+            "trophy_diamond_perfect_desc": "A full year of perfect habits",
+            
+            // Gamification - Additional Achievement Names/Desc
+            "achievement_level_5": "Leveling Up",
+            "achievement_level_5_desc": "Reach level 5",
+            "achievement_level_10": "Immortal",
+            "achievement_level_10_desc": "Reach the maximum level",
+            "achievement_five_habits": "Organizer",
+            "achievement_five_habits_desc": "Create 5 different habits",
+            "achievement_ai_habit": "AI Visionary",
+            "achievement_ai_habit_desc": "Create a habit using the AI camera"
         ]
     ]
     

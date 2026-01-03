@@ -260,6 +260,7 @@ struct TrophyCard: View {
 struct TrophyDetailSheet: View {
     let trophy: Trophy
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var lang = LanguageManager.shared
     @State private var isShining = false
     
     var body: some View {
@@ -329,7 +330,7 @@ struct TrophyDetailSheet: View {
                     
                     // Requirement
                     VStack(spacing: 8) {
-                        Text("Requisito")
+                        Text(lang.localized("requirement"))
                             .font(.headline)
                         
                         Text(trophy.requirement.description)
@@ -345,7 +346,7 @@ struct TrophyDetailSheet: View {
                         Image(systemName: "star.fill")
                             .foregroundStyle(.yellow)
                         
-                        Text("+\(trophy.tier.xpBonus) XP Bonus")
+                        Text("+\(trophy.tier.xpBonus) \(lang.localized("xp_bonus"))")
                             .font(.headline)
                             .foregroundStyle(.yellow)
                     }
@@ -358,29 +359,29 @@ struct TrophyDetailSheet: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                             
-                            Text("¡Conseguido!")
+                            Text(lang.localized("achieved"))
                                 .foregroundStyle(.green)
                             
                             if let date = trophy.unlockedDate {
-                                Text("el \(date.formatted(date: .abbreviated, time: .omitted))")
+                                Text(String(format: lang.localized("on_date"), date.formatted(date: .abbreviated, time: .omitted)))
                                     .foregroundStyle(.secondary)
                             }
                         }
                         .font(.subheadline)
                     } else {
-                        Text("🔒 Aún no conseguido")
+                        Text("🔒 \(lang.localized("not_achieved_yet"))")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
                 .padding()
             }
-            .navigationTitle("Detalle del Trofeo")
+            .navigationTitle(lang.localized("trophy_detail"))
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Cerrar") {
+                    Button(lang.localized("close")) {
                         dismiss()
                     }
                 }
@@ -388,7 +389,7 @@ struct TrophyDetailSheet: View {
             #else
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Cerrar") {
+                    Button(lang.localized("close")) {
                         dismiss()
                     }
                 }

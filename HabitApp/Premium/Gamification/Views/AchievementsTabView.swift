@@ -198,6 +198,7 @@ struct AchievementCard: View {
 struct AchievementDetailSheet: View {
     let achievement: Achievement
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var lang = LanguageManager.shared
     
     var body: some View {
         NavigationStack {
@@ -247,7 +248,7 @@ struct AchievementDetailSheet: View {
                     
                     // Progress section
                     VStack(spacing: 12) {
-                        Text(LanguageManager.shared.localized("progress"))
+                        Text(lang.localized("progress"))
                             .font(.headline)
                         
                         if achievement.isUnlocked {
@@ -255,11 +256,11 @@ struct AchievementDetailSheet: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.green)
                                 
-                                Text(LanguageManager.shared.localized("completed"))
+                                Text(lang.localized("completed"))
                                     .foregroundStyle(.green)
                                 
                                 if let date = achievement.unlockedDate {
-                                    Text("el \(date.formatted(date: .abbreviated, time: .omitted))")
+                                    Text(String(format: lang.localized("on_date"), date.formatted(date: .abbreviated, time: .omitted)))
                                         .foregroundStyle(.secondary)
                                 }
                             }
@@ -283,12 +284,12 @@ struct AchievementDetailSheet: View {
                 }
                 .padding()
             }
-            .navigationTitle("Detalle del Logro")
+            .navigationTitle(lang.localized("achievement_detail"))
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Cerrar") {
+                    Button(lang.localized("close")) {
                         dismiss()
                     }
                 }
@@ -296,7 +297,7 @@ struct AchievementDetailSheet: View {
             #else
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Cerrar") {
+                    Button(lang.localized("close")) {
                         dismiss()
                     }
                 }

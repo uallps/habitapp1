@@ -143,8 +143,8 @@ enum AchievementRarity: String, Codable, CaseIterable {
 @MainActor
 struct Achievement: Identifiable, Codable, Equatable {
     let id: String
-    let name: String
-    let description: String
+    let nameKey: String
+    let descriptionKey: String
     let category: AchievementCategory
     let rarity: AchievementRarity
     let iconName: String
@@ -154,6 +154,14 @@ struct Achievement: Identifiable, Codable, Equatable {
     var isUnlocked: Bool
     var unlockedDate: Date?
     var progress: Int
+    
+    var name: String {
+        LanguageManager.shared.localized(nameKey)
+    }
+    
+    var description: String {
+        LanguageManager.shared.localized(descriptionKey)
+    }
     
     var progressPercentage: Double {
         guard requirement > 0 else { return 0 }
@@ -169,8 +177,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         // === STREAK ACHIEVEMENTS ===
         Achievement(
             id: "streak_3",
-            name: "Primer Paso",
-            description: "Completa una racha de 3 días",
+            nameKey: "achievement_streak_3",
+            descriptionKey: "achievement_streak_3_desc",
             category: .streak,
             rarity: .common,
             iconName: "flame",
@@ -182,8 +190,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "streak_7",
-            name: "Semana Perfecta",
-            description: "Mantén una racha de 7 días",
+            nameKey: "achievement_streak_7",
+            descriptionKey: "achievement_streak_7_desc",
             category: .streak,
             rarity: .uncommon,
             iconName: "flame.fill",
@@ -195,8 +203,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "streak_14",
-            name: "Dos Semanas Fuertes",
-            description: "Mantén una racha de 14 días",
+            nameKey: "achievement_streak_14",
+            descriptionKey: "achievement_streak_14_desc",
             category: .streak,
             rarity: .rare,
             iconName: "flame.circle",
@@ -208,8 +216,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "streak_30",
-            name: "Mes Invicto",
-            description: "Mantén una racha de 30 días",
+            nameKey: "achievement_streak_30",
+            descriptionKey: "achievement_streak_30_desc",
             category: .streak,
             rarity: .epic,
             iconName: "flame.circle.fill",
@@ -221,8 +229,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "streak_100",
-            name: "Centenario",
-            description: "Mantén una racha de 100 días",
+            nameKey: "achievement_streak_100",
+            descriptionKey: "achievement_streak_100_desc",
             category: .streak,
             rarity: .legendary,
             iconName: "flame.fill",
@@ -234,8 +242,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "streak_365",
-            name: "Un Año Imparable",
-            description: "Mantén una racha de 365 días",
+            nameKey: "achievement_streak_365",
+            descriptionKey: "achievement_streak_365_desc",
             category: .streak,
             rarity: .legendary,
             iconName: "flame.fill",
@@ -249,8 +257,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         // === COMPLETION ACHIEVEMENTS ===
         Achievement(
             id: "complete_1",
-            name: "Primer Hábito",
-            description: "Completa un hábito por primera vez",
+            nameKey: "achievement_complete_1",
+            descriptionKey: "achievement_complete_1_desc",
             category: .completion,
             rarity: .common,
             iconName: "checkmark.circle",
@@ -262,8 +270,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "complete_10",
-            name: "Empezando Fuerte",
-            description: "Completa 10 hábitos en total",
+            nameKey: "achievement_complete_10",
+            descriptionKey: "achievement_complete_10_desc",
             category: .completion,
             rarity: .common,
             iconName: "checkmark.circle.fill",
@@ -275,8 +283,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "complete_50",
-            name: "En Racha",
-            description: "Completa 50 hábitos en total",
+            nameKey: "achievement_complete_50",
+            descriptionKey: "achievement_complete_50_desc",
             category: .completion,
             rarity: .uncommon,
             iconName: "checkmark.seal",
@@ -288,8 +296,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "complete_100",
-            name: "Centurión",
-            description: "Completa 100 hábitos en total",
+            nameKey: "achievement_complete_100",
+            descriptionKey: "achievement_complete_100_desc",
             category: .completion,
             rarity: .rare,
             iconName: "checkmark.seal.fill",
@@ -301,8 +309,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "complete_500",
-            name: "Medio Millar",
-            description: "Completa 500 hábitos en total",
+            nameKey: "achievement_complete_500",
+            descriptionKey: "achievement_complete_500_desc",
             category: .completion,
             rarity: .epic,
             iconName: "checkmark.shield",
@@ -314,8 +322,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "complete_1000",
-            name: "Mil Victorias",
-            description: "Completa 1000 hábitos en total",
+            nameKey: "achievement_complete_1000",
+            descriptionKey: "achievement_complete_1000_desc",
             category: .completion,
             rarity: .legendary,
             iconName: "checkmark.shield.fill",
@@ -329,8 +337,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         // === CONSISTENCY ACHIEVEMENTS ===
         Achievement(
             id: "weekly_perfect",
-            name: "Semana Perfecta",
-            description: "Completa todos los hábitos durante una semana",
+            nameKey: "achievement_perfect_week",
+            descriptionKey: "achievement_perfect_week_desc",
             category: .consistency,
             rarity: .rare,
             iconName: "calendar.badge.checkmark",
@@ -342,8 +350,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "monthly_80",
-            name: "Mes Productivo",
-            description: "Logra 80% de completados en un mes",
+            nameKey: "achievement_monthly_80",
+            descriptionKey: "achievement_monthly_80_desc",
             category: .consistency,
             rarity: .epic,
             iconName: "calendar.circle.fill",
@@ -355,8 +363,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "early_bird",
-            name: "Madrugador",
-            description: "Completa un hábito antes de las 7 AM",
+            nameKey: "achievement_early_bird",
+            descriptionKey: "achievement_early_bird_desc",
             category: .consistency,
             rarity: .uncommon,
             iconName: "sunrise.fill",
@@ -368,8 +376,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "night_owl",
-            name: "Noctámbulo",
-            description: "Completa un hábito después de las 11 PM",
+            nameKey: "achievement_night_owl",
+            descriptionKey: "achievement_night_owl_desc",
             category: .consistency,
             rarity: .uncommon,
             iconName: "moon.stars.fill",
@@ -383,8 +391,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         // === EXPLORER ACHIEVEMENTS ===
         Achievement(
             id: "first_photo",
-            name: "Fotógrafo",
-            description: "Añade una foto a un hábito completado",
+            nameKey: "achievement_first_photo",
+            descriptionKey: "achievement_first_photo_desc",
             category: .explorer,
             rarity: .common,
             iconName: "camera.fill",
@@ -396,8 +404,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "first_3d",
-            name: "Explorador 3D",
-            description: "Crea tu primer modelo 3D",
+            nameKey: "achievement_first_3d",
+            descriptionKey: "achievement_first_3d_desc",
             category: .explorer,
             rarity: .rare,
             iconName: "cube.fill",
@@ -409,8 +417,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "ai_habit",
-            name: "Visionario AI",
-            description: "Crea un hábito usando la cámara AI",
+            nameKey: "achievement_ai_habit",
+            descriptionKey: "achievement_ai_habit_desc",
             category: .explorer,
             rarity: .rare,
             iconName: "brain.head.profile",
@@ -422,8 +430,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "five_habits",
-            name: "Organizador",
-            description: "Crea 5 hábitos diferentes",
+            nameKey: "achievement_five_habits",
+            descriptionKey: "achievement_five_habits_desc",
             category: .explorer,
             rarity: .uncommon,
             iconName: "square.grid.2x2.fill",
@@ -435,8 +443,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "all_categories",
-            name: "Explorador Total",
-            description: "Crea hábitos en todas las categorías",
+            nameKey: "achievement_all_categories",
+            descriptionKey: "achievement_all_categories_desc",
             category: .explorer,
             rarity: .epic,
             iconName: "globe",
@@ -450,8 +458,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         // === SPECIAL ACHIEVEMENTS ===
         Achievement(
             id: "first_day",
-            name: "Bienvenido",
-            description: "Completa tu primer día en la app",
+            nameKey: "achievement_first_day",
+            descriptionKey: "achievement_first_day_desc",
             category: .special,
             rarity: .common,
             iconName: "hand.wave.fill",
@@ -463,8 +471,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "comeback",
-            name: "Regreso Triunfal",
-            description: "Vuelve después de 7 días sin usar la app",
+            nameKey: "achievement_comeback",
+            descriptionKey: "achievement_comeback_desc",
             category: .special,
             rarity: .rare,
             iconName: "arrow.counterclockwise.circle.fill",
@@ -476,8 +484,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "new_year",
-            name: "Año Nuevo",
-            description: "Completa un hábito el 1 de enero",
+            nameKey: "achievement_new_year",
+            descriptionKey: "achievement_new_year_desc",
             category: .special,
             rarity: .epic,
             iconName: "party.popper.fill",
@@ -489,8 +497,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "level_5",
-            name: "Subiendo de Nivel",
-            description: "Alcanza el nivel 5",
+            nameKey: "achievement_level_5",
+            descriptionKey: "achievement_level_5_desc",
             category: .special,
             rarity: .rare,
             iconName: "arrow.up.circle.fill",
@@ -502,8 +510,8 @@ struct Achievement: Identifiable, Codable, Equatable {
         ),
         Achievement(
             id: "level_10",
-            name: "Inmortal",
-            description: "Alcanza el nivel máximo",
+            nameKey: "achievement_level_10",
+            descriptionKey: "achievement_level_10_desc",
             category: .special,
             rarity: .legendary,
             iconName: "crown.fill",
@@ -520,14 +528,22 @@ struct Achievement: Identifiable, Codable, Equatable {
 @MainActor
 struct Trophy: Identifiable, Codable, Equatable {
     let id: String
-    let name: String
-    let description: String
+    let nameKey: String
+    let descriptionKey: String
     let iconName: String
     let imageName: String
     let tier: TrophyTier
     let requirement: TrophyRequirement
     var isUnlocked: Bool
     var unlockedDate: Date?
+    
+    var name: String {
+        LanguageManager.shared.localized(nameKey)
+    }
+    
+    var description: String {
+        LanguageManager.shared.localized(descriptionKey)
+    }
     
     static func == (lhs: Trophy, rhs: Trophy) -> Bool {
         lhs.id == rhs.id
@@ -585,17 +601,17 @@ enum TrophyRequirement: Codable, Equatable {
     var description: String {
         switch self {
         case .totalCompletions(let count):
-            return "Completa \(count) hábitos en total"
+            return String(format: LanguageManager.shared.localized("req_total_completions"), count)
         case .maxStreak(let days):
-            return "Alcanza una racha de \(days) días"
+            return String(format: LanguageManager.shared.localized("req_max_streak"), days)
         case .monthlyPerfect(let months):
-            return "Logra \(months) meses perfectos"
+            return String(format: LanguageManager.shared.localized("req_monthly_perfect"), months)
         case .totalXP(let xp):
-            return "Acumula \(xp) XP"
+            return String(format: LanguageManager.shared.localized("req_total_xp"), xp)
         case .level(let level):
-            return "Alcanza el nivel \(level)"
+            return String(format: LanguageManager.shared.localized("req_level"), level)
         case .achievements(let count):
-            return "Desbloquea \(count) logros"
+            return String(format: LanguageManager.shared.localized("req_achievements"), count)
         }
     }
 }
@@ -607,8 +623,8 @@ struct TrophyCollection {
         // Bronze Trophies
         Trophy(
             id: "bronze_beginner",
-            name: "Iniciado",
-            description: "Tus primeros pasos en el camino del hábito",
+            nameKey: "trophy_bronze_beginner",
+            descriptionKey: "trophy_bronze_beginner_desc",
             iconName: "trophy.fill",
             imageName: "trophy_bronze_beginner",
             tier: .bronze,
@@ -617,8 +633,8 @@ struct TrophyCollection {
         ),
         Trophy(
             id: "bronze_streak",
-            name: "Persistente",
-            description: "Demuestras que puedes mantener el ritmo",
+            nameKey: "trophy_bronze_streak",
+            descriptionKey: "trophy_bronze_streak_desc",
             iconName: "trophy.fill",
             imageName: "trophy_bronze_streak",
             tier: .bronze,
@@ -629,8 +645,8 @@ struct TrophyCollection {
         // Silver Trophies
         Trophy(
             id: "silver_dedicated",
-            name: "Dedicado",
-            description: "Tu compromiso es admirable",
+            nameKey: "trophy_silver_dedicated",
+            descriptionKey: "trophy_silver_dedicated_desc",
             iconName: "trophy.fill",
             imageName: "trophy_silver_dedicated",
             tier: .silver,
@@ -639,8 +655,8 @@ struct TrophyCollection {
         ),
         Trophy(
             id: "silver_streak",
-            name: "Inquebrantable",
-            description: "Un mes sin fallar, impresionante",
+            nameKey: "trophy_silver_streak",
+            descriptionKey: "trophy_silver_streak_desc",
             iconName: "trophy.fill",
             imageName: "trophy_silver_streak",
             tier: .silver,
@@ -651,8 +667,8 @@ struct TrophyCollection {
         // Gold Trophies
         Trophy(
             id: "gold_master",
-            name: "Maestro de Hábitos",
-            description: "Has dominado el arte de la constancia",
+            nameKey: "trophy_gold_master",
+            descriptionKey: "trophy_gold_master_desc",
             iconName: "trophy.fill",
             imageName: "trophy_gold_master",
             tier: .gold,
@@ -661,8 +677,8 @@ struct TrophyCollection {
         ),
         Trophy(
             id: "gold_streak",
-            name: "Leyenda Viviente",
-            description: "100 días de pura determinación",
+            nameKey: "trophy_gold_streak",
+            descriptionKey: "trophy_gold_streak_desc",
             iconName: "trophy.fill",
             imageName: "trophy_gold_streak",
             tier: .gold,
@@ -673,8 +689,8 @@ struct TrophyCollection {
         // Platinum Trophies
         Trophy(
             id: "platinum_elite",
-            name: "Élite",
-            description: "Solo los más dedicados llegan aquí",
+            nameKey: "trophy_platinum_elite",
+            descriptionKey: "trophy_platinum_elite_desc",
             iconName: "trophy.fill",
             imageName: "trophy_platinum_elite",
             tier: .platinum,
@@ -683,8 +699,8 @@ struct TrophyCollection {
         ),
         Trophy(
             id: "platinum_achiever",
-            name: "Coleccionista",
-            description: "Has desbloqueado la mayoría de logros",
+            nameKey: "trophy_platinum_achiever",
+            descriptionKey: "trophy_platinum_achiever_desc",
             iconName: "trophy.fill",
             imageName: "trophy_platinum_achiever",
             tier: .platinum,
@@ -695,8 +711,8 @@ struct TrophyCollection {
         // Diamond Trophies
         Trophy(
             id: "diamond_legend",
-            name: "Inmortal",
-            description: "Has alcanzado la cima. Eres una leyenda.",
+            nameKey: "trophy_diamond_legend",
+            descriptionKey: "trophy_diamond_legend_desc",
             iconName: "crown.fill",
             imageName: "trophy_diamond_legend",
             tier: .diamond,
@@ -705,8 +721,8 @@ struct TrophyCollection {
         ),
         Trophy(
             id: "diamond_perfect",
-            name: "Perfección",
-            description: "Un año completo de hábitos perfectos",
+            nameKey: "trophy_diamond_perfect",
+            descriptionKey: "trophy_diamond_perfect_desc",
             iconName: "star.circle.fill",
             imageName: "trophy_diamond_perfect",
             tier: .diamond,

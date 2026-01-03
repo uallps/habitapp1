@@ -282,8 +282,8 @@ struct TrophyIconView: View {
             AchievementIconView(
                 achievement: Achievement(
                     id: "test_unlocked",
-                    name: "Test Unlocked",
-                    description: "Test",
+                    nameKey: "achievement_streak_30",
+                    descriptionKey: "achievement_streak_30_desc",
                     category: .streak,
                     rarity: .epic,
                     iconName: "flame.fill",
@@ -300,8 +300,8 @@ struct TrophyIconView: View {
             AchievementIconView(
                 achievement: Achievement(
                     id: "test_locked",
-                    name: "Test Locked",
-                    description: "Test",
+                    nameKey: "achievement_streak_30",
+                    descriptionKey: "achievement_streak_30_desc",
                     category: .streak,
                     rarity: .epic,
                     iconName: "flame.fill",
@@ -327,8 +327,8 @@ struct TrophyIconView: View {
             TrophyIconView(
                 trophy: Trophy(
                     id: "test_gold",
-                    name: "Test Gold",
-                    description: "Test",
+                    nameKey: "trophy_gold_master",
+                    descriptionKey: "trophy_gold_master_desc",
                     iconName: "trophy.fill",
                     imageName: "trophy_gold_master",
                     tier: .gold,
@@ -342,8 +342,8 @@ struct TrophyIconView: View {
             TrophyIconView(
                 trophy: Trophy(
                     id: "test_diamond",
-                    name: "Test Diamond",
-                    description: "Test",
+                    nameKey: "trophy_diamond_legend",
+                    descriptionKey: "trophy_diamond_legend_desc",
                     iconName: "crown.fill",
                     imageName: "trophy_diamond_legend",
                     tier: .diamond,
