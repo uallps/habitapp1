@@ -228,12 +228,12 @@ HabitApp implementa una **arquitectura modular** basada en el **Plugin Pattern**
 
 | Módulo | Autor | Estado | Descripción |
 |--------|-------|:------:|-------------|
-| 📢 **Anuncios** | Avilés | ✅ | Gestión de anuncios AdMob para versión gratuita |
+| 📢 **Anuncios** | Alejandro | ✅ | Gestión de anuncios AdMob para versión gratuita |
 | 📸 **Media 3D** | Lucas | ✅ | Captura de fotos y modelos 3D con LiDAR |
 | 🤖 **IA para Hábitos** | Diego | ✅ | Sugerencias inteligentes con GPT-4 Vision |
 | 📊 **Recaps** | Jorge | ✅ | Resúmenes visuales tipo Instagram Stories |
-| 🌍 **Multilenguaje** | Nieto | ✅ | Internacionalización (Español/Inglés) |
-| 🎨 **Apariencia** | Avilés | ✅ | Modo claro/oscuro/automático |
+| 🌍 **Multilenguaje** | Antonio | ✅ | Internacionalización (Español/Inglés) |
+| 🎨 **Apariencia** | Alejandro | ✅ | Modo claro/oscuro/automático |
 | 🎮 **Gamificación** | Lucas | ✅ | XP, niveles, logros, trofeos, rewards |
 
 ---
