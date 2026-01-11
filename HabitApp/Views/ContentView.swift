@@ -12,12 +12,12 @@ struct ContentView: View {
     @StateObject private var inAppNotifier = InAppNotificationManager.shared
     private let calendar = Calendar.current
     
-    /// Determines if camera AI feature should be shown based on target and settings
+    /// Determines if camera AI feature should be shown based on target, settings and module availability
     private var showCameraFeature: Bool {
         #if PREMIUM
-        return true
+        return ModuleRegistry.shared.hasAIHabitModule
         #else
-        return appConfig.hasCameraFeature
+        return appConfig.hasCameraFeature && ModuleRegistry.shared.hasAIHabitModule
         #endif
     }
     
@@ -43,8 +43,8 @@ struct ContentView: View {
                     case 0:
                         habitsTab
                     case 1:
-                        if showCameraFeature {
-                            CameraHabitView()
+                        if showCameraFeature, let aiModule = ModuleRegistry.shared.aiHabitModule {
+                            aiModule.cameraView()
                         } else {
                             StatisticsView()
                         }
@@ -78,8 +78,8 @@ struct ContentView: View {
                     }
                     .tag(0)
 
-                if showCameraFeature {
-                    CameraHabitView()
+                if showCameraFeature, let aiModule = ModuleRegistry.shared.aiHabitModule {
+                    aiModule.cameraView()
                         .tabItem {
                             VStack {
                                 Image(systemName: "camera.fill")

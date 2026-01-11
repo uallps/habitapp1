@@ -11,6 +11,9 @@ struct HabitAppApp: App {
     @StateObject private var appConfig = AppConfig.shared
 
     init() {
+        // Registrar todos los módulos al iniciar la app
+        ModuleBootstrapper.bootstrap()
+        
         #if os(iOS)
         print("[v0] ========================================")
         print("[v0] Inicializando HabitAppApp...")
