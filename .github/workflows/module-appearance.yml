@@ -225,3 +225,4 @@ jobs:
         else
           echo "⚠️ Documentation not found at docs/modules/MODULO_APPEARANCE.md"
         fi
+        

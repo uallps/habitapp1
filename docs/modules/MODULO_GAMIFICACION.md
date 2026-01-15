@@ -367,3 +367,71 @@ print("🎮 [GamificationStore] XP después: \(profile.totalXP)")
 ```swift
 GamificationStore.shared.resetAllData()
 ```
+
+## Diagrama de Arquitectura
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                      Núcleo de la App                    │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ HabitCompletionSheet / UI                          │  │
+│  │ - Llama a GamificationStore.shared.habitCompleted()│  │
+│  │ - Muestra GamificationHubView / AchievementsTabView│  │
+│  └───────────────┬────────────────────────────────────┘  │
+└──────────────────┼──────────────────────────────────────-┘
+                                     │
+                                     ▼
+┌──────────────────────────────────────────────────────────┐
+│                  ModuleRegistry / Bootstrapper           │
+│ - Registra `GamificationModuleImpl` en el arranque       │
+└────────────────────────────┬─────────────────────────────┘
+                                                         │
+                                                         ▼
+┌──────────────────────────────────────────────────────────┐
+│               GamificationModuleImpl (concreto)          │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │ - GamificationStore(lógica de negocio, XP, niveles)│  │
+│  │ - GamificationStore.shared (singleton / Provider)  │  │
+│  │ - GamificationStore ->Persistence (UserDefaults/DB)│  │
+│  │ - Views: GamificationHubView, AchievementsTabView  │  │
+│  └────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────┘
+
+Flujo resumido:
+- `ModuleBootstrapper` crea `GamificationModuleImpl` y lo registra en `ModuleRegistry`.
+- Al completar un hábito, `HabitCompletionSheet` o `HabitStore` invocan `GamificationStore.shared.habitCompleted(...)`.
+- `GamificationStore` calcula XP, actualiza rachas, desbloquea logros/trofeos, persiste estado y publica cambios via `@Published`.
+- Vistas observan `GamificationStore` y reaccionan (UI, animaciones, notificaciones).
+```
+
+## Para la presentación
+
+- **Resumen:** Añade XP, niveles, logros, trofeos y recompensas diarias; integra en el flujo de completado de hábitos para aumentar retención.
+- **Patrones de diseño:**
+    - **Singleton:** `GamificationStore.shared` como fuente de verdad.
+    - **Observer (Reactive):** `@Published` + Combine para actualizaciones en tiempo real en vistas.
+    - **Factory/Builder:** creación de logros y trofeos predefinidos centralizada.
+    - **Protocol-oriented:** `GamificationModuleProtocol` permite intercambiar implementaciones.
+- **Tecnologías / APIs:**
+    - `Swift`, `SwiftUI` para UI y vistas reactivas.
+    - `Combine` (`@Published`) para observación de estado.
+    - `UserDefaults` / persistencia local para perfil y metadatos (puede ampliarse a DB local).
+    - Animaciones SwiftUI y assets (`Assets.xcassets/Gamification`).
+- **Requisitos / Consideraciones:**
+    - No requiere permisos especiales (salvo acceso opcional a fotos si se integran imágenes de logros).
+    - Diseñado para funcionar en todas las plataformas soportadas por la app con adaptaciones UI.
+- **Slides sugeridas:**
+    - Diagrama de flujo (bootstrap → registro → trigger desde HabitCompletion → GamificationStore → UI).
+    - Patrones y beneficios (retención, feedback inmediato, testabilidad).
+    - KPIs a medir: aumento de retención diaria, incremento de completados, uso de features premium.
+
+## Desacoplamiento e inyección de dependencias
+
+- **Interfaz vs implementación:** el núcleo interactúa con `GamificationModuleProtocol` / `GamificationStore` sin conocer detalles internos de cálculo de XP o reglas de desbloqueo.
+- **Registro centralizado:** `ModuleRegistry` permite inyectar la implementación concreta (`GamificationModuleImpl`) en bootstrap; útil para sustituir por `MockGamificationModule` en tests.
+- **Singleton controlado:** aunque `GamificationStore.shared` es singleton, la arquitectura permite resetear o sustituir la instancia durante pruebas o arranque alternativo.
+- **Observabilidad desacoplada:** vistas consumen datos publicados (`@Published`) en vez de llamadas directas, evitando llamadas sincrónicas y acoplamiento fuerte.
+- **Persistencia encapsulada:** la lógica de almacenamiento (UserDefaults/DB) está dentro del módulo; el núcleo solo requiere API de alto nivel (por ejemplo, `resetAllData()`).
+- **Feature gating y configuración:** el módulo puede exponer flags (e.g., `isPremiumEnabled`) y el núcleo simplemente consulta dichas banderas para mostrar/ocultar UI.
+- **Testabilidad:** se pueden crear `MockGamificationStore` o inyectar test doubles via `ModuleRegistry` para validar flujos (XP, logros, notificaciones) sin tocar persistencia real.
+
