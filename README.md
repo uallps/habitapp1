@@ -449,7 +449,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 - **OpenAI** por GPT-4 Vision
 - **Google** por AdMob SDK
 - **Icons8** por los iconos 3D Fluency
-- A todos los profesores y compañeros de la **Universidad de Almería**
+- Al profesor y a los compañeros de la asignatura
 
 ---
 
