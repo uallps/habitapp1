@@ -116,7 +116,7 @@ jobs:
     - name: 🔨 Build for testing
       run: |
         echo "Checking available simulators..."
-        if xcrun simctl list devices available | grep -q "iPhone 17 \("; then
+        if xcrun simctl list devices available | grep -Fq 'iPhone 17 ('; then
           DEST="platform=iOS Simulator,name=iPhone 17"
         else
           DEST="platform=iOS Simulator"
@@ -164,11 +164,11 @@ jobs:
       run: |
         echo "Checking available simulators for test step..."
         SIMS=$(xcrun simctl list devices available || true)
-        if echo "$SIMS" | grep -q "iPhone 17 \("; then
+        if echo "$SIMS" | grep -Fq 'iPhone 17 ('; then
           DEST_LOCAL="platform=iOS Simulator,name=iPhone 17"
-        elif echo "$SIMS" | grep -q "iPhone 17 Pro \("; then
+        elif echo "$SIMS" | grep -Fq 'iPhone 17 Pro ('; then
           DEST_LOCAL="platform=iOS Simulator,name=iPhone 17 Pro"
-        elif echo "$SIMS" | grep -q "iPhone 17 Pro Max \("; then
+        elif echo "$SIMS" | grep -Fq 'iPhone 17 Pro Max ('; then
           DEST_LOCAL="platform=iOS Simulator,name=iPhone 17 Pro Max"
         else
           DEST_LOCAL="platform=iOS Simulator"
