@@ -520,12 +520,21 @@ struct RewardClaimAnimation: View {
             }
             
             // XP count up animation
-            let steps = 20
-            let stepValue = rewardInfo.xpEarned / steps
-            for i in 0..<steps {
-                DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.05) {
-                    xpCountUp = min((i + 1) * stepValue, rewardInfo.xpEarned)
+            let totalXP = rewardInfo.xpEarned
+            let steps = min(20, totalXP) // Ajustar steps para valores pequeños
+            if steps > 0 {
+                let stepValue = max(1, totalXP / steps) // Al menos 1 por paso
+                for i in 0..<steps {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.05) {
+                        xpCountUp = min((i + 1) * stepValue, totalXP)
+                    }
                 }
+                // Asegurar que el último valor sea exacto
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(steps) * 0.05) {
+                    xpCountUp = totalXP
+                }
+            } else {
+                xpCountUp = totalXP
             }
         }
     }
