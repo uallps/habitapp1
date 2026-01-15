@@ -331,7 +331,7 @@ El corazón de HabitApp es su **sistema de gamificación** que transforma la for
 
 ```bash
 # Ejecutar todos los tests
-xcodebuild test -project HabitApp.xcodeproj -scheme HabitApp -destination 'platform=iOS Simulator,name=iPhone 17'
+xcodebuild test -project HabitApp.xcodeproj -scheme HabitApp -destination 'platform=iOS Simulator'
 
 # Tests de gamificación específicamente
 xcodebuild test -project HabitApp.xcodeproj -scheme HabitApp -only-testing:HabitAppTests/GamificationTests

@@ -23,7 +23,7 @@ on:
 
 env:
   SCHEME: "HabitApp"
-  DESTINATION: "platform=iOS Simulator,name=iPhone 17,OS=26.0.1"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17"
   MODULE_NAME: "Ads"
   MODULE_AUTHOR: "Avilés"
 
@@ -33,7 +33,7 @@ jobs:
   # ============================================
   lint:
     name: 🔍 Lint Ads Module
-    runs-on: macos-15
+    runs-on: macos-latest
     
     steps:
     - name: 📥 Checkout repository
@@ -63,15 +63,15 @@ jobs:
   # ============================================
   build:
     name: 🔨 Build with Ads Module
-    runs-on: macos-15
+    runs-on: macos-latest
     needs: lint
     
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
     
-    - name: 🔧 Select Xcode version
-      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    - name: 🔧 (Skip) Use runner default Xcode
+      run: echo "Using default Xcode on runner"
     
     - name: 📋 Show Xcode version
       run: xcodebuild -version
@@ -81,10 +81,17 @@ jobs:
     
     - name: 🔨 Build for testing
       run: |
+        echo "Checking available simulators..."
+        if xcrun simctl list devices available | grep -q "iPhone 17 \("; then
+          DEST="platform=iOS Simulator,name=iPhone 17"
+        else
+          DEST="platform=iOS Simulator"
+        fi
+        echo "Using destination: $DEST"
         xcodebuild build-for-testing \
           -project HabitApp.xcodeproj \
           -scheme "$SCHEME" \
-          -destination "$DESTINATION" \
+          -destination "$DEST" \
           -configuration Debug \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
@@ -106,25 +113,38 @@ jobs:
   # ============================================
   test:
     name: 🧪 Test Ads Module
-    runs-on: macos-15
+    runs-on: macos-latest
     needs: build
     
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
     
-    - name: 🔧 Select Xcode version
-      run: sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+    - name: 🔧 (Skip) Use runner default Xcode
+      run: echo "Using default Xcode on runner"
     
     - name: 📁 Create logs directory
       run: mkdir -p build/logs
     
     - name: 🧪 Run Ads Module Tests
       run: |
+        echo "Checking available simulators for test step..."
+        SIMS=$(xcrun simctl list devices available || true)
+        if echo "$SIMS" | grep -q "iPhone 17 \("; then
+          DEST_LOCAL="platform=iOS Simulator,name=iPhone 17"
+        elif echo "$SIMS" | grep -q "iPhone 17 Pro \("; then
+          DEST_LOCAL="platform=iOS Simulator,name=iPhone 17 Pro"
+        elif echo "$SIMS" | grep -q "iPhone 17 Pro Max \("; then
+          DEST_LOCAL="platform=iOS Simulator,name=iPhone 17 Pro Max"
+        else
+          DEST_LOCAL="platform=iOS Simulator"
+        fi
+        echo "DEST=$DEST_LOCAL" >> $GITHUB_ENV
+        echo "Using destination for tests: $DEST_LOCAL"
         xcodebuild test \
           -project HabitApp.xcodeproj \
           -scheme "$SCHEME" \
-          -destination "$DESTINATION" \
+          -destination "$DEST_LOCAL" \
           -configuration Debug \
           -only-testing:HabitAppTests \
           CODE_SIGN_IDENTITY="" \
@@ -148,7 +168,7 @@ jobs:
   # ============================================
   docs:
     name: 📚 Generate Ads Docs
-    runs-on: macos-15
+    runs-on: macos-latest
     needs: test
     if: github.ref == 'refs/heads/main'
     
